@@ -68,6 +68,8 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_dot_count = 0;
 	m_bird.LoadFile(L"birdp.png");
 
+	m_moviemake.SetProfileName(L"profile720p.prx");
+
 	//OnEditSetvariables();
 }
 
