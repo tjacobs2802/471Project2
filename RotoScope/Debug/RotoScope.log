@@ -1,17 +1,7 @@
-﻿  pch.cpp
-  ChildFrm.cpp
-  DirSoundSource.cpp
-  GrImage.cpp
-  LineDlg.cpp
-  MainFrm.cpp
-  MovieMake.cpp
-  MovieSource.cpp
-  RotoScope.cpp
-  RotoScopeDoc.cpp
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(747,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(748,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(919,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+﻿  RotoScopeDoc.cpp
+C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(755,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(756,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(929,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   RotoScopeView.cpp
   Generating Code...
-ChildFrm.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
-  RotoScope.vcxproj -> C:\Users\Julia Bishop\Desktop\471Project2\Debug\RotoScope.exe
+  RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe

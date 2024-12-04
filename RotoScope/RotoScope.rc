@@ -63,7 +63,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\RotoScope.ico"
+
 IDR_RotoScopeTYPE       ICON                    "res\\RotoScopeDoc.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -71,6 +73,7 @@ IDR_RotoScopeTYPE       ICON                    "res\\RotoScopeDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -163,6 +166,7 @@ BEGIN
         MENUITEM "Pen",                         ID_MOUSEMODE_PEN
         MENUITEM "Line",                        ID_MOUSEMODE_LINE
         MENUITEM "Bird",                        ID_MOUSEMODE_BIRD
+        MENUITEM "Cat",                         ID_MOUSEMODE_CAT
     END
     POPUP "&View"
     BEGIN

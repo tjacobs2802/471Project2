@@ -72,6 +72,10 @@ private:
 	CLineDlg			m_dlg;
 	CGrImage			m_bird;
 	CGrImage			m_mario;
+	
+	
+	CGrImage			m_cat;
+
 
 	int m_x1;
 	int m_y1;
@@ -122,8 +126,11 @@ public:
 	afx_msg void OnMousemodeBird();
 	afx_msg void OnEditUndo32793();
 
-	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask);
+	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); //Aidan
 	void ApplyWaveEffect(); // julia
+	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); //Aidan
+	void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1); //Aidan
+	afx_msg void OnMousemodeCat();
 };
 
 
