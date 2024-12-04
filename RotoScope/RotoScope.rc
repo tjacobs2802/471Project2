@@ -139,6 +139,7 @@ BEGIN
         MENUITEM "Draw Line",                   ID_EDIT_DRAWLINE
         MENUITEM "Rotate Image",                ID_EDIT_ROTATEIMAGE
         MENUITEM "Place Bird",                  ID_EDIT_PLACEBIRD
+        MENUITEM "Place Mario",                 ID_EDIT_PLACEMARIO
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
     END
     POPUP "&Movies"
@@ -167,6 +168,7 @@ BEGIN
         MENUITEM "Line",                        ID_MOUSEMODE_LINE
         MENUITEM "Bird",                        ID_MOUSEMODE_BIRD
         MENUITEM "Cat",                         ID_MOUSEMODE_CAT
+        MENUITEM "Mario",                       ID_MOUSEMODE_MARIO
     END
     POPUP "&View"
     BEGIN

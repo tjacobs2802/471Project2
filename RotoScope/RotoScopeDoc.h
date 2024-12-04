@@ -130,7 +130,10 @@ public:
 	void ApplyWaveEffect(); // julia
 	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); //Aidan
 	void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1); //Aidan
+	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
 	afx_msg void OnMousemodeCat();
+	afx_msg void OnMousemodeMario();
+	afx_msg void OnEditPlacemario();
 };
 
 

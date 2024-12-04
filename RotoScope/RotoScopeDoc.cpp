@@ -50,6 +50,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_BIRD, &CRotoScopeDoc::OnMousemodeBird)
 	ON_COMMAND(ID_EDIT_UNDO32793, &CRotoScopeDoc::OnEditUndo32793)
 	ON_COMMAND(ID_MOUSEMODE_CAT, &CRotoScopeDoc::OnMousemodeCat)
+	ON_COMMAND(ID_MOUSEMODE_MARIO, &CRotoScopeDoc::OnMousemodeMario)
+	ON_COMMAND(ID_EDIT_PLACEMARIO, &CRotoScopeDoc::OnEditPlacemario)
 END_MESSAGE_MAP()
 
 
@@ -458,6 +460,12 @@ void CRotoScopeDoc::Mouse(int p_x, int p_y)
 		DrawCat(m_image, x, y);
 		UpdateAllViews(NULL);
 	}
+
+	else if (m_mode == 4)
+	{
+		DrawMario(m_image, x, y);
+		UpdateAllViews(NULL);
+	}
 }
 
 
@@ -845,6 +853,21 @@ void CRotoScopeDoc::OnEditPlacebird()
 	}
 }
 
+
+void CRotoScopeDoc::OnEditPlacemario()
+{
+	// TODO: Add your command handler code here
+	if (m_dlg.DoModal() == IDOK)
+	{
+		m_x1 = m_dlg.m_x1;
+		m_y1 = m_dlg.m_y1;
+
+		DrawMario(m_image, m_x1, m_y1);
+		UpdateAllViews(NULL);
+	}
+}
+
+
 void CRotoScopeDoc::DrawLine(CGrImage &image, int x1, int y1, int x2, int y2, int width, int b, int g, int r)
 {
 	std::list<CPoint> empty;
@@ -1019,6 +1042,29 @@ void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1)
 	}
 }
 
+void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
+{
+	//allow undo of placing
+	m_images.push(m_image);
+	for (int r = 0; r < m_mario.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_mario.GetWidth(); c++)
+		{
+			//make sure point is inside image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
+			{
+				if (m_mario[r][c * 4 + 3] >= 192)
+				{
+					m_image[r + y1][(c + x1) * 3] = m_mario[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_mario[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_mario[r][c * 4 + 2];
+				}
+			}
+		}
+	}
+}
+
+
 
 void CRotoScopeDoc::OnEditRotateimage()
 {
@@ -1071,6 +1117,12 @@ void CRotoScopeDoc::OnMousemodeCat()
 {
 	m_mode = 3;
 }
+
+void CRotoScopeDoc::OnMousemodeMario()
+{
+	m_mode = 4;
+}
+
 
 
 void CRotoScopeDoc::OnEditUndo32793()
@@ -1126,3 +1178,4 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 		}
 	}
 }
+
