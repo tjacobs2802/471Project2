@@ -1017,3 +1017,47 @@ void CRotoScopeDoc::OnEditUndo32793()
 		UpdateAllViews(NULL);
 	}
 }
+
+void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
+{
+	// Define the target key color for blue screen
+	const double key_r = 0.0; // Red component of blue screen color
+	const double key_g = 0.0; // Green component of blue screen color
+	const double key_b = 255.0; // Blue component of blue screen color
+
+	// Ensure the output image has the same dimensions as the foreground
+	output.SetSameSize(foreground);
+
+	// Iterate over every pixel in the foreground image
+	for (int y = 0; y < foreground.GetHeight(); ++y)
+	{
+		for (int x = 0; x < foreground.GetWidth(); ++x)
+		{
+			// Foreground color
+			double r = foreground[y][x * 3];
+			double g = foreground[y][x * 3 + 1];
+			double b = foreground[y][x * 3 + 2];
+
+			// Background color
+			double bg_r = background[y][x * 3];
+			double bg_g = background[y][x * 3 + 1];
+			double bg_b = background[y][x * 3 + 2];
+
+			// Calculate alpha value using the Vlahos equation
+			double alpha = 1.0 - min(1.0, (b - key_b) / 255.0);
+			alpha = max(0.0, min(alpha, 1.0)); // Ensure alpha is within [0, 1]
+
+			// Apply the garbage mask to adjust the alpha value
+			double mask_value = garbageMask[y][x * 3] / 255.0; // Normalize the garbage mask pixel to [0, 1]
+			alpha *= (1.0 - mask_value); // Reduce alpha based on the garbage mask
+
+			// Blend the pixels based on the alpha value
+			double out_r = alpha * r + (1.0 - alpha) * bg_r;
+			double out_g = alpha * g + (1.0 - alpha) * bg_g;
+			double out_b = alpha * b + (1.0 - alpha) * bg_b;
+
+			// Write the blended color to the output image
+			output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
+		}
+	}
+}

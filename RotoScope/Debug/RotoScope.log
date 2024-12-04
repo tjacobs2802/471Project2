@@ -1,3 +1,15 @@
-﻿  RotoScopeDoc.cpp
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(891,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScope.vcxproj -> C:\Users\tjaco\source\repos\cse471\CSE471Proj2\Debug\RotoScope.exe
+﻿  pch.cpp
+  ChildFrm.cpp
+  DirSoundSource.cpp
+  GrImage.cpp
+  LineDlg.cpp
+  MainFrm.cpp
+  MovieMake.cpp
+  MovieSource.cpp
+  RotoScope.cpp
+  RotoScopeDoc.cpp
+C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(891,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  RotoScopeView.cpp
+  Generating Code...
+ChildFrm.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe
