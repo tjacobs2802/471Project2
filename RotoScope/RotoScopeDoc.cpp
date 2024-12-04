@@ -67,6 +67,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_width = 1;
 	m_dot_count = 0;
 	m_bird.LoadFile(L"birdp.png");
+	m_mario.LoadFile(L"mario.png");
 
 	m_moviemake.SetProfileName(L"profile720p.prx");
 
@@ -756,6 +757,20 @@ void CRotoScopeDoc::DrawImage()
 			}
 		}
 	}
+
+	for (int r = 0; r < m_mario.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_mario.GetWidth(); c++)
+		{
+			if (m_mario[r][c * 4 + 3] >= 192)
+			{
+				m_image[r][c * 3] = m_mario[r][c * 4];
+				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
+				m_image[r][c * 3 + 2] = m_mario[r][c * 4 + 2];
+			}
+		}
+	}
+
 
 	UpdateAllViews(NULL);
 }

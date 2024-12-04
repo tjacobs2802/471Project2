@@ -71,6 +71,7 @@ private:
 	CGrImage			m_initial;
 	CLineDlg			m_dlg;
 	CGrImage			m_bird;
+	CGrImage			m_mario;
 
 	int m_x1;
 	int m_y1;
