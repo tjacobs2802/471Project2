@@ -123,6 +123,7 @@ public:
 	afx_msg void OnEditUndo32793();
 
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask);
+	void ApplyWaveEffect(); // julia
 };
 
 

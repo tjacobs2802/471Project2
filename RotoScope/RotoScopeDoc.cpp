@@ -732,6 +732,34 @@ void CRotoScopeDoc::OnEditClearframe()
 	UpdateAllViews(NULL);
 }
 
+void CRotoScopeDoc::ApplyWaveEffect()
+{
+	CGrImage tempImage;
+	tempImage.SetSameSize(m_image);
+
+	double waveAmplitude = 4.0;
+	double waveFrequency = 0.1;
+
+	for (int y = 0; y < m_image.GetHeight(); y++)
+	{
+		for (int x = 0; x < m_image.GetWidth(); x++)
+		{
+			int newX = x + waveAmplitude * sin(y * waveFrequency);
+			int newY = y + waveAmplitude * cos(x * waveFrequency);
+
+			newX = max(0, min(m_image.GetWidth() - 1, newX));
+			newY = max(0, min(m_image.GetHeight() - 1, newY));
+
+			tempImage[y][x * 3] = m_image[newY][newX * 3];
+			tempImage[y][x * 3 + 1] = m_image[newY][newX * 3 + 1];
+			tempImage[y][x * 3 + 2] = m_image[newY][newX * 3 + 2];
+		}
+	}
+
+	m_image = tempImage;
+}
+
+
 void CRotoScopeDoc::DrawImage()
 {
 	// Write image from m_initial into the current image
@@ -771,7 +799,7 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
-
+	ApplyWaveEffect();
 	UpdateAllViews(NULL);
 }
 
