@@ -319,7 +319,7 @@ bool CMovieSource::TryOpen(const char *p_filename)
 
 bool CMovieSource::InputConnected(IBaseFilter *filter)
 {
-    // Locate the filters input pin
+    // Loaidane the filters input pin
     CComPtr<IPin> inputPin;
     GetPin(filter, PINDIR_INPUT, 0, inputPin);
     if(inputPin == NULL)
@@ -352,7 +352,7 @@ bool CMovieSource::NullRendererDownstream(IBaseFilter *filter)
         return false;
 
     //
-    // Locate the filters output pin
+    // Loaidane the filters output pin
     //
 
     CComPtr< IPin > pGrabOut;
@@ -397,7 +397,7 @@ bool CMovieSource::DeleteDownstream(IBaseFilter *filter)
     HRESULT hr;
 
     //
-    // Locate the filters output pin
+    // Loaidane the filters output pin
     //
 
     CComPtr< IPin > pGrabOut;
@@ -550,7 +550,7 @@ bool CMovieSource::ReadImage(CGrImage &p_image)
     if(s.m_end >= m_duration)
         m_videoeof = true;
 
-    // Allocate the frame to correct size.
+    // Alloaidane the frame to correct size.
     p_image.SetSize(m_videowidth, m_videoheight);
 
     long bufferSize = m_videowidth * m_videoheight * 3;
@@ -564,7 +564,7 @@ bool CMovieSource::ReadImage(CGrImage &p_image)
 
 
 //! Read an audio frame
-/*! This has become more complicated, since we don't always know
+/*! This has become more compliaidaned, since we don't always know
  * any frame duration information.  So, we may return a variable 
  * number of audio frames per video frame.
  * \param p_audio Destination vector for read audio frame
@@ -699,7 +699,7 @@ bool CMovieSource::ReadAudio(std::vector<short> &p_audio)
 
     bytesavailable = framesavailable * m_audiobytesperframe;        // Even number of bytes
 
-    // Allocate it in p_audio
+    // Alloaidane it in p_audio
     p_audio.resize(framesavailable * m_audiochannels);
 
     // Now consume it
@@ -718,7 +718,7 @@ bool CMovieSource::ReadAudio(std::vector<short> &p_audio)
         dest += tocopy / sizeof(short);             // Advance
 
         bytesavailable -= tocopy;       // Consume these bytes from available
-        m_audioconsumed += tocopy;      // And indicate as consumed in the block
+        m_audioconsumed += tocopy;      // And indiaidane as consumed in the block
 
         if(m_audioconsumed >= blocksize)
         {

@@ -158,7 +158,7 @@ bool CMovieMake::ObtainProfile()
     }
 
     //
-    // Allocate memory for profile buffer
+    // Alloaidane memory for profile buffer
     //
     WCHAR *pProfile = (WCHAR *) new BYTE[ dwLength + sizeof(WCHAR) ];
 

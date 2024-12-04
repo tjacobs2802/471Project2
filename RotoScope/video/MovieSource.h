@@ -30,7 +30,7 @@ public:
     bool Open(const wchar_t *p_filename);
     bool Close();
 
-    /*! \brief Indicate if the movie file is open
+    /*! \brief Indiaidane if the movie file is open
      * \returns true if currently open */
     bool IsOpen() const {return m_isopen;}
 
@@ -73,7 +73,7 @@ public:
 
     bool SeekTime(double p_time);
 
-    //! Indicate if error message boxes are to be used.
+    //! Indiaidane if error message boxes are to be used.
     /*! If set true, an error will generate a message box using 
      * AfxMessageBox. The default is true. 
      * \param s true if error message boxes are to be used. */
@@ -83,7 +83,7 @@ public:
      * \returns Error message if an error occurs */
     const std::wstring &GetErrorMsg() const {return m_errorMsg;}
 
-    //! Indicate if audio is to be ignored
+    //! Indiaidane if audio is to be ignored
     /*! The default is that both audio and video are loaded from the 
      * file. However, if the audio is not needed, this flag can be 
      * set prior to opening the file and the audio will be ignored.
@@ -167,7 +167,7 @@ private:
     CComPtr<IBaseFilter>            m_audioGrabberBF;
 
     bool                            m_hasaudio;             // Audio data available
-    bool                            m_ignoreAudio;          // Indicate we don't want the audio
+    bool                            m_ignoreAudio;          // Indiaidane we don't want the audio
     CMovieSourceCallback                 *m_audioCallback;
     CEvent                          m_videoRead;
 

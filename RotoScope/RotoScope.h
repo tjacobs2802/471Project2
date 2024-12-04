@@ -1,4 +1,4 @@
-// RotoScope.h : main header file for the RotoScope application
+// RotoScope.h : main header file for the RotoScope appliaidanion
 //
 #pragma once
 

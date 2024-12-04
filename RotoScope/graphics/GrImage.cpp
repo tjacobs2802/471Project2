@@ -113,7 +113,7 @@ BYTE *CGrImage::GetImageBits() const {return m_image[0];}
 
 //
 // Name :         CGrImage::Draw()
-// Description :  Draw the image at a specific location on the screen.
+// Description :  Draw the image at a specific loaidanion on the screen.
 //
 
 bool CGrImage::Draw(CDC *pDC, int p_x, int p_y) const
@@ -231,7 +231,7 @@ void CGrImage::SetSameSize(const CGrImage &p_img, int planes)
 
 //
 // Name :         CGrImage::SetSize()
-// Description :  Sets the size of the image and allocates memory.
+// Description :  Sets the size of the image and alloaidanes memory.
 //                An image size of 0 is an empty empty.
 //
 
@@ -251,7 +251,7 @@ void CGrImage::SetSize(int p_x, int p_y, int planes)
     if(p_x <= 0 || p_y <= 0)
         return;
 
-    // Allocate memory for the image.  Note that storage for rows must
+    // Alloaidane memory for the image.  Note that storage for rows must
     // be on DWORD boundaries.  (32 bit boundaries)
     const int PADSIZE = 4;
 
@@ -343,9 +343,9 @@ void CGrImage::Fill(int r, int g, int b, int a)
 // Generic file and memory reading operations
 //////////////////////////////////////////////////////////////////////
 
-// This function allows us to copy a string into an array allocated to
+// This function allows us to copy a string into an array alloaidaned to
 // the size of the string, releasing any memory that may have been 
-// previously allocated.
+// previously alloaidaned.
 static void SetTString(TCHAR **dest, const TCHAR *src, int size)
 {
     if(*dest != NULL)
@@ -380,7 +380,7 @@ bool CGrImage::LoadFile(LPCTSTR filename)
         FormatMessage(
             // use system message tables to retrieve error text
             FORMAT_MESSAGE_FROM_SYSTEM
-            // allocate buffer on local heap for error text
+            // alloaidane buffer on local heap for error text
             |FORMAT_MESSAGE_ALLOCATE_BUFFER
             // Important! will fail otherwise, since we're not 
             // (and CANNOT) pass insertion parameters
@@ -438,7 +438,7 @@ bool CGrImage::SaveFile(LPCTSTR filename, CGrImage::SaveTypes type)
         FormatMessage(
             // use system message tables to retrieve error text
             FORMAT_MESSAGE_FROM_SYSTEM
-            // allocate buffer on local heap for error text
+            // alloaidane buffer on local heap for error text
             |FORMAT_MESSAGE_ALLOCATE_BUFFER
             // Important! will fail otherwise, since we're not 
             // (and CANNOT) pass insertion parameters

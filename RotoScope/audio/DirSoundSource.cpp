@@ -243,7 +243,7 @@ bool CDirSoundSource::TryOpen(const char *p_filename)
 
 bool CDirSoundSource::InputConnected(IBaseFilter *filter)
 {
-    // Locate the filters input pin
+    // Loaidane the filters input pin
     CComPtr<IPin> inputPin;
     GetPin(filter, PINDIR_INPUT, 0, inputPin);
     if(inputPin == NULL)
@@ -276,7 +276,7 @@ bool CDirSoundSource::NullRendererDownstream(IBaseFilter *filter)
         return false;
 
     //
-    // Locate the filters output pin
+    // Loaidane the filters output pin
     //
 
     CComPtr< IPin > pGrabOut;
@@ -321,7 +321,7 @@ bool CDirSoundSource::DeleteDownstream(IBaseFilter *filter)
     HRESULT hr;
 
     //
-    // Locate the filters output pin
+    // Loaidane the filters output pin
     //
 
     CComPtr< IPin > pGrabOut;

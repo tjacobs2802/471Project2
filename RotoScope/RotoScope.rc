@@ -166,7 +166,7 @@ BEGIN
         MENUITEM "Pen",                         ID_MOUSEMODE_PEN
         MENUITEM "Line",                        ID_MOUSEMODE_LINE
         MENUITEM "Bird",                        ID_MOUSEMODE_BIRD
-        MENUITEM "Cat",                         ID_MOUSEMODE_CAT
+        MENUITEM "Aidan",                       ID_MOUSEMODE_AIDAN
     END
     POPUP "&View"
     BEGIN

@@ -49,7 +49,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_LINE, &CRotoScopeDoc::OnMousemodeLine)
 	ON_COMMAND(ID_MOUSEMODE_BIRD, &CRotoScopeDoc::OnMousemodeBird)
 	ON_COMMAND(ID_EDIT_UNDO32793, &CRotoScopeDoc::OnEditUndo32793)
-	ON_COMMAND(ID_MOUSEMODE_CAT, &CRotoScopeDoc::OnMousemodeCat)
+	ON_COMMAND(ID_MOUSEMODE_AIDAN, &CRotoScopeDoc::OnMousemodeAidan)
 END_MESSAGE_MAP()
 
 
@@ -69,7 +69,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_dot_count = 0;
 	m_bird.LoadFile(L"birdp.png");
 	m_mario.LoadFile(L"mario.png");
-	m_cat.LoadFile(L"cat.png");
+	m_aidan.LoadFile(L"aidan.png");
 
 	m_moviemake.SetProfileName(L"profile720p.prx");
 
@@ -406,11 +406,11 @@ void CRotoScopeDoc::OnFramesWritethencreateremaining()
 //! pressed or moved on the screen.
 /*! It sets the associated pixel in the image to red right now. You'll 
  * likely make it do something different
- * \param p_x X location in image
- * \param p_y Y location in image */
+ * \param p_x X loaidanion in image
+ * \param p_y Y loaidanion in image */
 void CRotoScopeDoc::Mouse(int p_x, int p_y)
 {
-	// We need to convert screen locations to image locations
+	// We need to convert screen loaidanions to image loaidanions
 	int x = p_x;                            // No problem there.
 	int y = m_image.GetHeight() - p_y - 1;     // Just invert it.
 
@@ -455,7 +455,7 @@ void CRotoScopeDoc::Mouse(int p_x, int p_y)
 
 	else if (m_mode == 3)
 	{
-		DrawCat(m_image, x, y);
+		DrawAidan(m_image, x, y);
 		UpdateAllViews(NULL);
 	}
 }
@@ -997,22 +997,22 @@ void CRotoScopeDoc::DrawBird(CGrImage &image, int x1, int y1)
 	}
 }
 
-void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1)
+void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1)
 {
 	//allow undo of placing
 	m_images.push(m_image);
-	for (int r = 0; r < m_cat.GetHeight(); r++)
+	for (int r = 0; r < m_aidan.GetHeight(); r++)
 	{
-		for (int c = 0; c < m_cat.GetWidth(); c++)
+		for (int c = 0; c < m_aidan.GetWidth(); c++)
 		{
 			//make sure point is inside image
 			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
 			{
-				if (m_cat[r][c * 4 + 3] >= 192)
+				if (m_aidan[r][c * 4 + 3] >= 192)
 				{
-					m_image[r + y1][(c + x1) * 3] = m_cat[r][c * 4];
-					m_image[r + y1][(c + x1) * 3 + 1] = m_cat[r][c * 4 + 1];
-					m_image[r + y1][(c + x1) * 3 + 2] = m_cat[r][c * 4 + 2];
+					m_image[r + y1][(c + x1) * 3] = m_aidan[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_aidan[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_aidan[r][c * 4 + 2];
 				}
 			}
 		}
@@ -1067,7 +1067,7 @@ void CRotoScopeDoc::OnMousemodeBird()
 	m_mode = 2;
 }
 
-void CRotoScopeDoc::OnMousemodeCat()
+void CRotoScopeDoc::OnMousemodeAidan()
 {
 	m_mode = 3;
 }
@@ -1126,3 +1126,4 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 		}
 	}
 }
+

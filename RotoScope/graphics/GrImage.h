@@ -46,10 +46,10 @@ public:
     //! Destructor
     virtual ~CGrImage();
 
-    //! Draw the image at a specified location on the screen
+    //! Draw the image at a specified loaidanion on the screen
     /*! \param pDC Pointer to an MFC Device Context
-        \param x X location on the screen.
-        \param y Y location on the screen. 
+        \param x X loaidanion on the screen.
+        \param y Y loaidanion on the screen. 
         \returns true */
     bool Draw(CDC *pDC, int x, int y) const;
 
@@ -60,7 +60,7 @@ public:
     //! Load a image from a file
     /* \param filename The filename as a character string in the current 
        setting of Unicode or multibyte strings. 
-       \return true if located successfully. If false, an error 
+       \return true if loaidaned successfully. If false, an error 
        message will be placed into the error string and can be
        accessed via the GetError() function. */
     bool LoadFile(LPCTSTR filename);
@@ -105,8 +105,8 @@ public:
 
     //! Set a pixel value
     /*! Sets the value of a pixel. 
-        \param x X location (column)
-        \param y Y location (row)
+        \param x X loaidanion (column)
+        \param y Y loaidanion (row)
         \param r Red component.
         \param g Green component.
         \param b Blue component.
@@ -212,10 +212,10 @@ public:
     const TCHAR *GetError() const {return m_error;}
 
     /*! \brief Draw a line of a given color on the image
-     * \param x1 Starting x location
-     * \param y1 Starting y location
-     * \param x2 Ending x location
-     * \param y2 Ending y location
+     * \param x1 Starting x loaidanion
+     * \param y1 Starting y loaidanion
+     * \param x2 Ending x loaidanion
+     * \param y2 Ending y loaidanion
      * \param r Red color component
      * \param g Green color component
      * \param b Blue color component

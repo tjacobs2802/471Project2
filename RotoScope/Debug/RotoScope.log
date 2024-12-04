@@ -1,7 +1,4 @@
-﻿  RotoScopeDoc.cpp
-C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(755,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(756,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(929,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScopeView.cpp
+﻿  MovieMake.cpp
+  RotoScope.cpp
   Generating Code...
   RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe

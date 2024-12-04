@@ -21,9 +21,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-static UINT indicators[] =
+static UINT indiaidanors[] =
 {
-	ID_SEPARATOR,           // status line indicator
+	ID_SEPARATOR,           // status line indiaidanor
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
@@ -56,8 +56,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	if (!m_wndStatusBar.Create(this) ||
-		!m_wndStatusBar.SetIndicators(indicators,
-		  sizeof(indicators)/sizeof(UINT)))
+		!m_wndStatusBar.SetIndicators(indiaidanors,
+		  sizeof(indiaidanors)/sizeof(UINT)))
 	{
 		TRACE0("Failed to create status bar\n");
 		return -1;      // fail to create

@@ -16,9 +16,9 @@
 #include "graphics/GrImage.h"
 #include "LineDlg.h"
 
-/*! \mainpage RotoScope Starter Application
+/*! \mainpage RotoScope Starter Appliaidanion
  *
- * The Rotoscope application is a simple program that allows you to 
+ * The Rotoscope appliaidanion is a simple program that allows you to 
  * load frames of video, modify them in interesting ways, and save 
  * them to a new video file. Rotoscoping is an animation technique where 
  * frames of a movie are advanced one by one and edited by a user. 
@@ -74,7 +74,7 @@ private:
 	CGrImage			m_mario;
 	
 	
-	CGrImage			m_cat;
+	CGrImage			m_aidan;
 
 
 	int m_x1;
@@ -129,8 +129,10 @@ public:
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); //Aidan
 	void ApplyWaveEffect(); // julia
 	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); //Aidan
-	void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1); //Aidan
-	afx_msg void OnMousemodeCat();
+	void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1); //Aidan
+
+
+	afx_msg void OnMousemodeAidan();
 };
 
 

@@ -42,7 +42,7 @@ public:
     bool Open(const wchar_t *p_filename);
     bool Close();
 
-    /*! \brief Indicate if the audio file is open
+    /*! \brief Indiaidane if the audio file is open
      * \returns true if currently open */
     bool IsOpen() const {return m_isopen;}
 
@@ -61,7 +61,7 @@ public:
      * mono. This function will cause a mono file to create a stereo
      * frame by copying the sample read to the right channel. If the
      * audio file is stereo, this function works just like ReadFrame. 
-     * \param p_frame Pointer to a location to store two audio samples
+     * \param p_frame Pointer to a loaidanion to store two audio samples
      * \returns true if a frame is read */
     bool ReadStereoFrame(short *p_frame)
     {
@@ -90,7 +90,7 @@ public:
     int GetNumSampleFrames() const {return int(m_duration * m_audiosamplerate);}
 
 
-    /*! \brief Indicate if error message boxes are to be used.
+    /*! \brief Indiaidane if error message boxes are to be used.
      * If set true, an error will generate a message box using 
      * AfxMessageBox. The default is true. 
      * \param s true if error message boxes are to be used. */

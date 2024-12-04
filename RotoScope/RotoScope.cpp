@@ -1,4 +1,4 @@
-// RotoScope.cpp : Defines the class behaviors for the application.
+// RotoScope.cpp : Defines the class behaviors for the appliaidanion.
 //
 
 #include "pch.h"
@@ -42,13 +42,13 @@ CRotoScopeApp theApp;
 
 BOOL CRotoScopeApp::InitInstance()
 {
-	// InitCommonControlsEx() is required on Windows XP if an application
+	// InitCommonControlsEx() is required on Windows XP if an appliaidanion
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
 	// visual styles.  Otherwise, any window creation will fail.
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
 	// Set this to include all the common control classes you want to use
-	// in your application.
+	// in your appliaidanion.
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
@@ -68,9 +68,9 @@ BOOL CRotoScopeApp::InitInstance()
 	// Change the registry key under which our settings are stored
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+	SetRegistryKey(_T("Local AppWizard-Generated Appliaidanions"));
 	LoadStdProfileSettings(4);  // Load standard INI file options (including MRU)
-	// Register the application's document templates.  Document templates
+	// Register the appliaidanion's document templates.  Document templates
 	//  serve as the connection between documents, frame windows and views
 	CMultiDocTemplate* pDocTemplate;
 	pDocTemplate = new CMultiDocTemplate(IDR_RotoScopeTYPE,
