@@ -167,8 +167,7 @@ BEGIN
         MENUITEM "Pen",                         ID_MOUSEMODE_PEN
         MENUITEM "Line",                        ID_MOUSEMODE_LINE
         MENUITEM "Bird",                        ID_MOUSEMODE_BIRD
-        MENUITEM "Aidan",                       ID_MOUSEMODE_AIDAN
-        MENUITEM "Cat",                         ID_MOUSEMODE_CAT
+        MENUITEM "Aidan",                       ID_MOUSEMODE_MARIO
         MENUITEM "Mario",                       ID_MOUSEMODE_MARIO
     END
     POPUP "&View"

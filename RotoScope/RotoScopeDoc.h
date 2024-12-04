@@ -126,17 +126,18 @@ public:
 	afx_msg void OnMousemodeBird();
 	afx_msg void OnEditUndo32793();
 
-	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); //Aidan
 	void ApplyWaveEffect(); // julia
-	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); //Aidan
-	void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1); //Aidan
+	
+	//Aidan
+	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); 
+	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); 
+	void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1); 
+	afx_msg void OnMousemodeAidan(); 
 
-
-	afx_msg void OnMousemodeAidan(); // Aidan
-	void CRotoScopeDoc::DrawCat(CGrImage& image, int x1, int y1); //Aidan
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
-	afx_msg void OnMousemodeMario();
-	afx_msg void OnEditPlacemario();
+	afx_msg void OnMousemodeMario(); //Trevor
+	afx_msg void OnEditPlacemario(); //Trevor
+	
 };
 
 
