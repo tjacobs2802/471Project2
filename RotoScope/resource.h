@@ -36,10 +36,8 @@
 #define ID_MOUSEMODE_LINE               32791
 #define ID_MOUSEMODE_BIRD               32792
 #define ID_EDIT_UNDO32793               32793
-#define ID_MOUSEMODE_CAT                32794
-#define ID_MOUSEMODE_MARIO              32795
-#define ID_MOUSEMODE_AIDAN              32795
-#define ID_OnMouseModeMario             32795
+#define ID_MOUSEMODE_AIDAN              32797
+#define ID_MOUSEMODE_MARIO				32794
 #define ID_EDIT_PLACEMARIO              32796
 
 // Next default values for new objects

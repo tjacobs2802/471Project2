@@ -135,9 +135,10 @@ public:
 	afx_msg void OnMousemodeAidan(); 
 
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
-	afx_msg void OnMousemodeMario(); //Trevor
+	
 	afx_msg void OnEditPlacemario(); //Trevor
 	
+	afx_msg void OnMousemodeMario();
 };
 
 

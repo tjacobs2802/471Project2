@@ -51,6 +51,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_EDIT_UNDO32793, &CRotoScopeDoc::OnEditUndo32793)
 	ON_COMMAND(ID_MOUSEMODE_AIDAN, &CRotoScopeDoc::OnMousemodeAidan)
 	ON_COMMAND(ID_MOUSEMODE_MARIO, &CRotoScopeDoc::OnMousemodeMario)
+	ON_COMMAND(ID_EDIT_PLACEMARIO, &CRotoScopeDoc::OnEditPlacemario)
+
 END_MESSAGE_MAP()
 
 
