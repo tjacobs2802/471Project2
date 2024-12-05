@@ -102,6 +102,7 @@ private:
 	int m_dot_count;
 
 	std::stack<CGrImage>	m_images;
+	bool m_applyWaveEffect;
 
     afx_msg void OnFramesWriteoneframe();
     afx_msg void OnUpdateFramesWriteoneframe(CCmdUI *pCmdUI);
@@ -157,6 +158,7 @@ public:
 	void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1); //Trevor
 
 	afx_msg void OnMousemodeTrevor();
+	afx_msg void OnMousemodeApplywavewarp();
 	afx_msg void OnEditPlaceaidan();
 };
 

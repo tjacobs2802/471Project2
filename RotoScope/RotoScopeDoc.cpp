@@ -54,6 +54,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_EDIT_PLACEMARIO, &CRotoScopeDoc::OnEditPlacemario)
 	ON_COMMAND(ID_MOUSEMODE_JULIA, &CRotoScopeDoc::OnMousemodeJulia)
 	ON_COMMAND(ID_MOUSEMODE_TREVOR, &CRotoScopeDoc::OnMousemodeTrevor)
+	ON_COMMAND(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnMousemodeApplywavewarp)
 	ON_COMMAND(ID_EDIT_PLACEAIDAN, &CRotoScopeDoc::OnEditPlaceaidan)
 END_MESSAGE_MAP()
 
@@ -61,6 +62,7 @@ END_MESSAGE_MAP()
 //! Constructor for the document class.  
 CRotoScopeDoc::CRotoScopeDoc()
 {
+	m_applyWaveEffect = false;
     ::CoInitialize(NULL);
 
     // Set the image size to an initial default value and black.
@@ -783,6 +785,9 @@ void CRotoScopeDoc::OnEditClearframe()
 
 void CRotoScopeDoc::ApplyWaveEffect()
 {
+	if (!m_applyWaveEffect) {
+		return; // If the flag is false, don't apply the wave effect
+	}
 	CGrImage tempImage;
 	tempImage.SetSameSize(m_image);
 
@@ -850,7 +855,6 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
-	ApplyWaveEffect();
 	UpdateAllViews(NULL);
 }
 
@@ -1329,4 +1333,29 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 			output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
 		}
 	}
+}
+
+
+
+
+void CRotoScopeDoc::OnMousemodeJulia()
+{
+	m_mode = 5;
+}
+
+
+
+
+void CRotoScopeDoc::OnMousemodeTrevor()
+{
+	m_mode = 6;
+}
+
+
+void CRotoScopeDoc::OnMousemodeApplywavewarp()
+{
+	m_applyWaveEffect = true; // Enable the wave effect
+	ApplyWaveEffect();        // Apply the wave effect
+	m_applyWaveEffect = false; // Reset the flag after the effect is applied
+	UpdateAllViews(NULL);
 }
