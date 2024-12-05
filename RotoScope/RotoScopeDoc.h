@@ -88,6 +88,8 @@ private:
 
 	CGrImage			m_trevor;	
 
+	CGrImage			m_greg;
+
 	int m_x1;
 	int m_y1;
 	int m_x2;
@@ -100,6 +102,8 @@ private:
 
 	int m_mode;
 	int m_dot_count;
+
+	bool m_morphEnabled = false;
 
 	std::stack<CGrImage>	m_images;
 	bool m_applyWaveEffect;
@@ -149,7 +153,8 @@ public:
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
 
 	void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1); //Trevor
-	
+
+	void CRotoScopeDoc::DrawGreg(CGrImage& image, int x1, int y1); //Greg
 	afx_msg void OnEditPlacemario(); //Trevor
 
 	afx_msg void OnMousemodeMario();
@@ -160,6 +165,7 @@ public:
 	afx_msg void OnMousemodeTrevor();
 	afx_msg void OnMousemodeApplywavewarp();
 	afx_msg void OnEditPlaceaidan();
+	afx_msg void OnMousemodeGreg();
 };
 
 

@@ -173,6 +173,7 @@ BEGIN
         MENUITEM "Julia",                       ID_MOUSEMODE_JULIA
         MENUITEM "Trevor",                      ID_MOUSEMODE_TREVOR
         MENUITEM "Apply Wave Warp",             ID_MOUSEMODE_APPLYWAVEWARP
+        MENUITEM "Greg",                        ID_MOUSEMODE_GREG
     END
     POPUP "&View"
     BEGIN

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   ChildFrm.cpp
   LineDlg.cpp
   MainFrm.cpp
@@ -13,27 +14,10 @@ C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(1008,13): war
   RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+>>>>>>> Added Morph Class
 ﻿  RotoScopeDoc.cpp
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(794,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(795,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(983,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScope.vcxproj -> C:\Users\tjaco\source\repos\cse471\CSE471Proj2\Debug\RotoScope.exe
-=======
-﻿  pch.cpp
-  ChildFrm.cpp
-  DirSoundSource.cpp
-  GrImage.cpp
-=======
-﻿  ChildFrm.cpp
->>>>>>> inital commit
-  LineDlg.cpp
-  MainFrm.cpp
-  RotoScope.cpp
-  RotoScopeDoc.cpp
-\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(787,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(788,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(976,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScopeView.cpp
-  Generating Code...
+\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(802,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(803,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+\\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(991,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   RotoScope.vcxproj -> \\Mac\Home\Desktop\471Project2\Debug\RotoScope.exe
->>>>>>> greg's commit

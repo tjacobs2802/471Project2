@@ -51,6 +51,9 @@
     <ClCompile Include="armDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CMorph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="armDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CMorph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
