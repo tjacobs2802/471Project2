@@ -58,6 +58,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnMousemodeApplywavewarp)
 	ON_COMMAND(ID_EDIT_PLACEAIDAN, &CRotoScopeDoc::OnEditPlaceaidan)
 	ON_COMMAND(ID_MOUSEMODE_GREG, &CRotoScopeDoc::OnMousemodeGreg)
+	ON_COMMAND(ID_EDIT_MORPH, &CRotoScopeDoc::OnEditMorph)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_MORPH, &CRotoScopeDoc::OnUpdateEditMorph)
 END_MESSAGE_MAP()
 
 
@@ -65,6 +67,7 @@ END_MESSAGE_MAP()
 CRotoScopeDoc::CRotoScopeDoc()
 {
 	m_applyWaveEffect = false;
+	m_morphEnabled = false;
     ::CoInitialize(NULL);
 
     // Set the image size to an initial default value and black.
@@ -1395,4 +1398,20 @@ void CRotoScopeDoc::OnMousemodeApplywavewarp()
 void CRotoScopeDoc::OnMousemodeGreg()
 {
 	m_mode = 7;
+}
+
+
+void CRotoScopeDoc::OnEditMorph()
+{
+	if (m_morphEnabled) {
+		m_morphEnabled = false;
+	}
+	else {
+		m_morphEnabled = true;
+	}
+}
+
+void CRotoScopeDoc::OnUpdateEditMorph(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_morphEnabled);
 }

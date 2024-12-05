@@ -45,19 +45,18 @@
 #define ID_MOUSEMODE_AIDAN              32797
 #define ID_MOUSEMODE_JULIA              32798
 #define ID_MOUSEMODE_TREVOR             32799
-#define ID_EDIT_PLACEAIDAN              32801
 #define ID_MOUSEMODE_APPLYWAVEWARP      32800
-#define ID_MOUSEMODE_GREG               32800
+#define ID_EDIT_PLACEAIDAN              32801
+#define ID_MOUSEMODE_GREG               32802
+#define ID_EDIT_MARIOMORPH              32802
+#define ID_EDIT_MORPH                   32803
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        134
-#define _APS_NEXT_COMMAND_VALUE         32801
-#define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32801
+#define _APS_NEXT_COMMAND_VALUE         32804
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
