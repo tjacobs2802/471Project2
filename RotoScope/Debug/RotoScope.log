@@ -1,5 +1,5 @@
 ﻿  RotoScopeDoc.cpp
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(794,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(795,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(983,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScope.vcxproj -> C:\Users\tjaco\source\repos\cse471\CSE471Proj2\Debug\RotoScope.exe
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(799,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(800,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(987,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  RotoScope.vcxproj -> C:\Users\Julia Bishop\Desktop\471Project2\Debug\RotoScope.exe
