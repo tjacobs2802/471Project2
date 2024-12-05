@@ -1,2 +1,9 @@
 PlatformToolSet=v143:VCToolArchitecture=Native32Bit:VCToolsVersion=14.42.34433:TargetPlatformVersion=10.0.22621.0:
 Debug|Win32|C:\Users\aidan\Source\Repos\471Project2\|
+<<<<<<< HEAD
+PlatformToolSet=v143:VCToolArchitecture=Native32Bit:VCToolsVersion=14.41.34120:TargetPlatformVersion=10.0.22621.0:
+Debug|Win32|C:\Users\tjaco\source\repos\cse471\CSE471Proj2\|
+=======
+PlatformToolSet=v143:VCToolArchitecture=NativeARM64:VCToolsVersion=14.41.34120:TargetPlatformVersion=10.0.22621.0:
+Debug|Win32|\\Mac\Home\Desktop\471Project2\|
+>>>>>>> greg's commit

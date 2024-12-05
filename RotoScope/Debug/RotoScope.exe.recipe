@@ -3,6 +3,11 @@
   <ProjectOutputs>
     <ProjectOutput>
       <FullPath>C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe</FullPath>
+<<<<<<< HEAD
+      <FullPath>C:\Users\tjaco\source\repos\cse471\CSE471Proj2\Debug\RotoScope.exe</FullPath>
+=======
+      <FullPath>\\Mac\Home\Desktop\471Project2\Debug\RotoScope.exe</FullPath>
+>>>>>>> greg's commit
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
