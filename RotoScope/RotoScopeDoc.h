@@ -101,7 +101,7 @@ private:
 	int m_mode;
 	int m_dot_count;
 
-	bool m_morphEnabled = false;
+	bool m_morphEnabled;
 
 	std::stack<CGrImage>	m_images;
 	bool m_applyWaveEffect;
@@ -166,6 +166,8 @@ public:
 	afx_msg void OnMousemodeApplywavewarp();
 	afx_msg void OnEditPlaceaidan();
 	afx_msg void OnMousemodeGreg();
+	afx_msg void OnEditMorph();
+	afx_msg void OnUpdateEditMorph(CCmdUI* pCmdUI);
 };
 
 

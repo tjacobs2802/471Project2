@@ -142,6 +142,7 @@ BEGIN
         MENUITEM "Place Mario",                 ID_EDIT_PLACEMARIO
         MENUITEM "Place Aidan",                 ID_EDIT_PLACEAIDAN
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
+        MENUITEM "Mario Morph",                 ID_EDIT_MORPH
     END
     POPUP "&Movies"
     BEGIN
