@@ -1336,22 +1336,6 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 }
 
 
-
-
-void CRotoScopeDoc::OnMousemodeJulia()
-{
-	m_mode = 5;
-}
-
-
-
-
-void CRotoScopeDoc::OnMousemodeTrevor()
-{
-	m_mode = 6;
-}
-
-
 void CRotoScopeDoc::OnMousemodeApplywavewarp()
 {
 	m_applyWaveEffect = true; // Enable the wave effect
