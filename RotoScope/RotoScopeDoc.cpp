@@ -61,13 +61,14 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_EDIT_MORPH, &CRotoScopeDoc::OnEditMorph)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_MORPH, &CRotoScopeDoc::OnUpdateEditMorph)
 	ON_COMMAND(ID_MOUSEMODE_RECOLOR, &CRotoScopeDoc::OnMousemodeRecolor)
+	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
 END_MESSAGE_MAP()
 
 
 //! Constructor for the document class.  
 CRotoScopeDoc::CRotoScopeDoc()
 {
-	m_applyWaveEffect = false;
+	m_waveEnabled = false;
 	m_morphEnabled = false;
     ::CoInitialize(NULL);
 
@@ -338,6 +339,11 @@ void CRotoScopeDoc::CreateOneFrame()
 			i++;
 		}
 	}
+
+	if (m_waveEnabled) {
+		ApplyWaveEffect();
+	}
+
 	int frameNumber = m_movieframe;
 	int initialX = 400;
 	int initialY = 0;
@@ -793,36 +799,6 @@ void CRotoScopeDoc::OnEditClearframe()
 
 	DrawImage();
 	UpdateAllViews(NULL);
-}
-
-void CRotoScopeDoc::ApplyWaveEffect()
-{
-	if (!m_applyWaveEffect) {
-		return; // If the flag is false, don't apply the wave effect
-	}
-	CGrImage tempImage;
-	tempImage.SetSameSize(m_image);
-
-	double waveAmplitude = 4.0;
-	double waveFrequency = 0.1;
-
-	for (int y = 0; y < m_image.GetHeight(); y++)
-	{
-		for (int x = 0; x < m_image.GetWidth(); x++)
-		{
-			int newX = x + waveAmplitude * sin(y * waveFrequency);
-			int newY = y + waveAmplitude * cos(x * waveFrequency);
-
-			newX = max(0, min(m_image.GetWidth() - 1, newX));
-			newY = max(0, min(m_image.GetHeight() - 1, newY));
-
-			tempImage[y][x * 3] = m_image[newY][newX * 3];
-			tempImage[y][x * 3 + 1] = m_image[newY][newX * 3 + 1];
-			tempImage[y][x * 3 + 2] = m_image[newY][newX * 3 + 2];
-		}
-	}
-
-	m_image = tempImage;
 }
 
 
@@ -1467,15 +1443,6 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 }
 
 
-void CRotoScopeDoc::OnMousemodeApplywavewarp()
-{
-	m_applyWaveEffect = true; // Enable the wave effect
-	ApplyWaveEffect();        // Apply the wave effect
-	m_applyWaveEffect = false; // Reset the flag after the effect is applied
-	UpdateAllViews(NULL);
-}
-
-
 void CRotoScopeDoc::OnMousemodeGreg()
 {
 	m_mode = 7;
@@ -1539,4 +1506,55 @@ void CRotoScopeDoc::OnMousemodeRecolor()
 	m_image = recoloredImage;
 
 	UpdateAllViews(NULL);
+}
+
+void CRotoScopeDoc::ApplyWaveEffect()
+{
+	if (!m_waveEnabled) {
+		return; // If the flag is false, don't apply the wave effect
+	}
+	CGrImage tempImage;
+	tempImage.SetSameSize(m_image);
+
+	double waveAmplitude = 4.0;
+	double waveFrequency = 0.1;
+
+	for (int y = 0; y < m_image.GetHeight(); y++)
+	{
+		for (int x = 0; x < m_image.GetWidth(); x++)
+		{
+			int newX = x + waveAmplitude * sin(y * waveFrequency);
+			int newY = y + waveAmplitude * cos(x * waveFrequency);
+
+			newX = max(0, min(m_image.GetWidth() - 1, newX));
+			newY = max(0, min(m_image.GetHeight() - 1, newY));
+
+			tempImage[y][x * 3] = m_image[newY][newX * 3];
+			tempImage[y][x * 3 + 1] = m_image[newY][newX * 3 + 1];
+			tempImage[y][x * 3 + 2] = m_image[newY][newX * 3 + 2];
+		}
+	}
+
+	m_image = tempImage;
+	UpdateAllViews(NULL);
+}
+
+
+void CRotoScopeDoc::OnMousemodeApplywavewarp()
+{
+	if (m_waveEnabled) {
+		m_waveEnabled = false;
+		m_image = m_image;
+		UpdateAllViews(NULL);
+	}
+	else {
+		m_waveEnabled = true;
+		m_tempImage = m_image;
+		ApplyWaveEffect();
+	}
+}
+
+void CRotoScopeDoc::OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_waveEnabled);
 }
