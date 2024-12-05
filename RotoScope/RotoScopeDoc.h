@@ -80,6 +80,7 @@ private:
 
 	CGrImage			m_fireworks;
 
+	CGrImage			m_trevor;	
 
 	int m_x1;
 	int m_y1;
@@ -140,13 +141,17 @@ public:
 	afx_msg void OnMousemodeAidan(); 
 
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
+
+	void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1); //Trevor
 	
 	afx_msg void OnEditPlacemario(); //Trevor
-	
+
 	afx_msg void OnMousemodeMario();
 	afx_msg void OnMousemodeJulia();
 
 	void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1); //Trevor
+
+	afx_msg void OnMousemodeTrevor();
 };
 
 
