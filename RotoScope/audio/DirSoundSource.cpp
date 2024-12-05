@@ -321,7 +321,7 @@ bool CDirSoundSource::DeleteDownstream(IBaseFilter *filter)
     HRESULT hr;
 
     //
-    // Loaidane the filters output pin
+    // Locate the filters output pin
     //
 
     CComPtr< IPin > pGrabOut;

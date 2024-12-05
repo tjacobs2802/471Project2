@@ -9,9 +9,5 @@ C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(1008,13): war
   RotoScopeView.cpp
   armDlg.cpp
   DirSoundSource.cpp
-  GrImage.cpp
-  MovieMake.cpp
-  MovieSource.cpp
   Generating Code...
-armDlg.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe

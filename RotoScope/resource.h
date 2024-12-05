@@ -45,7 +45,7 @@
 #define ID_MOUSEMODE_AIDAN              32797
 #define ID_MOUSEMODE_JULIA              32798
 #define ID_MOUSEMODE_TREVOR             32799
-#define ID_EDIT_PLACEAIDAN              32800
+#define ID_EDIT_PLACEAIDAN              32801
 #define ID_MOUSEMODE_APPLYWAVEWARP      32800
 
 // Next default values for new objects
