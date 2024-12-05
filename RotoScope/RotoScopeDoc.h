@@ -78,6 +78,8 @@ private:
 
 	CGrImage			m_julia;
 
+	CGrImage			m_fireworks;
+
 
 	int m_x1;
 	int m_y1;
@@ -143,6 +145,8 @@ public:
 	
 	afx_msg void OnMousemodeMario();
 	afx_msg void OnMousemodeJulia();
+
+	void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1); //Trevor
 };
 
 

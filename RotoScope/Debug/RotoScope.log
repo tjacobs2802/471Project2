@@ -1,11 +1,5 @@
-﻿  ChildFrm.cpp
-  LineDlg.cpp
-  MainFrm.cpp
-  RotoScope.cpp
-  RotoScopeDoc.cpp
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(770,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(771,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(959,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  RotoScopeView.cpp
-  Generating Code...
+﻿  RotoScopeDoc.cpp
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(787,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(788,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Julia Bishop\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(976,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   RotoScope.vcxproj -> C:\Users\Julia Bishop\Desktop\471Project2\Debug\RotoScope.exe

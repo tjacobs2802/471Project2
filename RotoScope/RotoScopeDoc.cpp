@@ -74,6 +74,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_mario.LoadFile(L"mario.png");
 	m_aidan.LoadFile(L"aidan.png");
 	m_julia.LoadFile(L"julia.png");
+	m_fireworks.LoadFile(L"fireworks.png");
 
 	m_moviemake.SetProfileName(L"profile720p.prx");
 
@@ -238,92 +239,108 @@ void CRotoScopeDoc::OnFramesCreateoneframe()
 
 void CRotoScopeDoc::CreateOneFrame()
 {
-    //
-    // Clear our frame first
-    //
+	//
+	// Clear our frame first
+	//
 
-    m_image.Fill(0, 0, 0);
+	m_image.Fill(0, 0, 0);
 
-    //
-    // Read any image from source video?
-    //
+	//
+	// Read any image from source video?
+	//
 
-    if(m_moviesource.HasVideo())
-    {
-        // Important:  Don't read directly into m_image.  Our source may be a 
-        // different size!  I'm reading into a temporary image, then copying
-        // the data over.
+	if (m_moviesource.HasVideo())
+	{
+		// Important:  Don't read directly into m_image.  Our source may be a 
+		// different size!  I'm reading into a temporary image, then copying
+		// the data over.
 
-        CGrImage image;
+		CGrImage image;
 		if (m_moviesource.ReadImage(m_initial))
 		{
 			DrawImage();
 		}
-    }
+	}
 
-    //
-    // Read any audio from the source video?  Note that we read and write the 
-    // audio associated with one frame of video.
-    //
+	//
+	// Read any audio from the source video?  Note that we read and write the 
+	// audio associated with one frame of video.
+	//
 
-    std::vector<short> audio;
-    if(m_moviesource.HasAudio() && m_moviesource.ReadAudio(audio))
-    {
-        // The problem is that the input audio may not be in the same format
-        // as the output audio.  For example, we may have a different number of 
-        // audio frames for a given video frame.  Also, the channels may be
-        // different.  I'll assume my output is stereo here, since I created a
-        // stereo profile, but the input may be mono.
+	std::vector<short> audio;
+	if (m_moviesource.HasAudio() && m_moviesource.ReadAudio(audio))
+	{
+		// The problem is that the input audio may not be in the same format
+		// as the output audio.  For example, we may have a different number of 
+		// audio frames for a given video frame.  Also, the channels may be
+		// different.  I'll assume my output is stereo here, since I created a
+		// stereo profile, but the input may be mono.
 
-        if(m_moviesource.GetNumChannels() == 2)
-        {
-            // Easiest, both are the same.
-            // What's the ratio of playback?
-            double playrate = double(audio.size()) / double(m_audio.size());
-            for(unsigned f=0;  f<m_audio.size() / 2;  f++)
-            {
-                int srcframe = int(playrate * f);
-                m_audio[f*2] = audio[srcframe*2];
-                m_audio[f*2+1] = audio[srcframe*2+1];
-            }
-        }
-        else
-        {
-            // Mono into stereo
-            double playrate = double(2. * audio.size()) / double(m_audio.size());
-            for(unsigned f=0;  f<m_audio.size() / 2;  f++)
-            {
-                int srcframe = int(playrate * f);
-                m_audio[f*2] = audio[srcframe];
-                m_audio[f*2+1] = audio[srcframe];
-            }
-        }
+		if (m_moviesource.GetNumChannels() == 2)
+		{
+			// Easiest, both are the same.
+			// What's the ratio of playback?
+			double playrate = double(audio.size()) / double(m_audio.size());
+			for (unsigned f = 0; f < m_audio.size() / 2; f++)
+			{
+				int srcframe = int(playrate * f);
+				m_audio[f * 2] = audio[srcframe * 2];
+				m_audio[f * 2 + 1] = audio[srcframe * 2 + 1];
+			}
+		}
+		else
+		{
+			// Mono into stereo
+			double playrate = double(2. * audio.size()) / double(m_audio.size());
+			for (unsigned f = 0; f < m_audio.size() / 2; f++)
+			{
+				int srcframe = int(playrate * f);
+				m_audio[f * 2] = audio[srcframe];
+				m_audio[f * 2 + 1] = audio[srcframe];
+			}
+		}
 
-    }
-    else
-    {
-        // If there is no audio to read, set to silence.
-        for(unsigned int i=0;  i<m_audio.size();  i++)
-            m_audio[i] = 0;
-    }
+	}
+	else
+	{
+		// If there is no audio to read, set to silence.
+		for (unsigned int i = 0; i < m_audio.size(); i++)
+			m_audio[i] = 0;
+	}
 
-    //
-    // Is there any background audio to mix in?
-    //
+	//
+	// Is there any background audio to mix in?
+	//
 
-    if(m_backaudio.IsOpen())
-    {
-        for(std::vector<short>::iterator i=m_audio.begin();  i!=m_audio.end();  )
-        {
-            short audio[2];
-            m_backaudio.ReadStereoFrame(audio);
+	if (m_backaudio.IsOpen())
+	{
+		for (std::vector<short>::iterator i = m_audio.begin(); i != m_audio.end(); )
+		{
+			short audio[2];
+			m_backaudio.ReadStereoFrame(audio);
 
-            *i = ShortRange(*i + audio[0] * 0.3);
-            i++;
-            *i = ShortRange(*i + audio[1] * 0.3);
-            i++;
-        }
-    }
+			*i = ShortRange(*i + audio[0] * 0.3);
+			i++;
+			*i = ShortRange(*i + audio[1] * 0.3);
+			i++;
+		}
+	}
+	int frameNumber = m_movieframe;
+	int initialX = 400;
+	int initialY = 0;
+	int speed = 2;
+
+	int newX = initialX; 
+	int newY = initialY + frameNumber * speed; 
+
+	newX = (std::min)(m_image.GetWidth() - 1, (std::max)(0, newX));
+	newY = (std::min)(m_image.GetHeight() - 1, (std::max)(0, newY));
+
+	DrawFireworks(m_image, newX, newY);
+
+	OnFramesWriteoneframe();
+
+	UpdateAllViews(NULL);
 }
 
 //
@@ -1021,6 +1038,28 @@ void CRotoScopeDoc::DrawBird(CGrImage &image, int x1, int y1)
 					m_image[r + y1][(c + x1) * 3] = m_bird[r][c * 4];
 					m_image[r + y1][(c + x1) * 3 + 1] = m_bird[r][c * 4 + 1];
 					m_image[r + y1][(c + x1) * 3 + 2] = m_bird[r][c * 4 + 2];
+				}
+			}
+		}
+	}
+}
+
+void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1)
+{
+	//allow undo of placing
+	m_images.push(m_image);
+	for (int r = 0; r < m_fireworks.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_fireworks.GetWidth(); c++)
+		{
+			//make sure point is inside image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
+			{
+				if (m_fireworks[r][c * 4 + 3] >= 192)
+				{
+					m_image[r + y1][(c + x1) * 3] = m_fireworks[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_fireworks[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_fireworks[r][c * 4 + 2];
 				}
 			}
 		}
