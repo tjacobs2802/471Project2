@@ -908,20 +908,100 @@ void CRotoScopeDoc::OnEditPlaceaidan()
 {
 	if (m_armDlg.DoModal() == IDOK)
 	{
-		int armX = m_armDlg.m_x;
-		int armY = m_armDlg.m_y;
-		double angle = m_armDlg.m_angle;
+		int x = m_armDlg.m_x;          // Shared pivot X-coordinate (center of the body)
+		int y = m_armDlg.m_y;          // Shared pivot Y-coordinate (center of the body)
+		double angle = m_armDlg.m_angle; // Rotation angle for the arm
+
+		// Adjust these offsets to place the arm at the shoulder
+		int offsetX = 37;  // Example X offset for shoulder
+		int offsetY = 67;  // Example Y offset for shoulder
 
 		// Clear the canvas
 		m_image.Fill(0, 0, 0);
 
-		// Draw yourself and your arm
-		DrawAidan(m_image, armX, armY);
+		// Draw the body at the pivot point
+		DrawAidan(m_image, x, y);
+
+		// Create the rotated arm
+		CGrImage rotatedArm;
+		RotateArm(angle, rotatedArm);
+
+		// Overlay the rotated arm onto the canvas
+		for (int r = 0; r < rotatedArm.GetHeight(); ++r)
+		{
+			for (int c = 0; c < rotatedArm.GetWidth(); ++c)
+			{
+				int armX = x + offsetX + c - rotatedArm.GetWidth() / 2; // Adjusted for shoulder
+				int armY = y + offsetY + r - rotatedArm.GetHeight() / 2; // Adjusted for shoulder
+
+				if (armY < m_image.GetHeight() && armX < m_image.GetWidth() && armY >= 0 && armX >= 0)
+				{
+					if (rotatedArm[r][c * 4 + 3] >= 192) // Non-transparent pixels
+					{
+						m_image[armY][armX * 3] = rotatedArm[r][c * 4];       // Red
+						m_image[armY][armX * 3 + 1] = rotatedArm[r][c * 4 + 1]; // Green
+						m_image[armY][armX * 3 + 2] = rotatedArm[r][c * 4 + 2]; // Blue
+					}
+				}
+			}
+		}
 
 		// Refresh the view
 		UpdateAllViews(NULL);
 	}
 }
+
+void CRotoScopeDoc::RotateArm(double angle, CGrImage& rotatedArm)
+{
+	int rows = m_aidanArm.GetHeight();
+	int cols = m_aidanArm.GetWidth();
+
+	// Adjust these to the shoulder coordinates relative to the arm image
+	int shoulderX = 37;   // X offset for shoulder within the arm image
+	int shoulderY = 67;   // Y offset for shoulder within the arm image
+
+	double radians = angle * 3.14159 / 180.0;  // Convert angle to radians
+
+	// Initialize the rotated image with transparent background
+	rotatedArm.SetSize(cols, rows, 4); // Ensure same size and alpha channel
+	for (int r = 0; r < rows; ++r)
+	{
+		for (int c = 0; c < cols; ++c)
+		{
+			rotatedArm[r][c * 4] = 0;       // Red
+			rotatedArm[r][c * 4 + 1] = 0;   // Green
+			rotatedArm[r][c * 4 + 2] = 0;   // Blue
+			rotatedArm[r][c * 4 + 3] = 0;   // Alpha
+		}
+	}
+
+	// Perform the rotation around the shoulder pivot
+	for (int r = 0; r < rows; ++r)
+	{
+		for (int c = 0; c < cols; ++c)
+		{
+			int dx = c - shoulderX;
+			int dy = r - shoulderY;
+
+			// Apply rotation around the shoulder pivot
+			int newX = static_cast<int>(cols / 2 + dx * cos(radians) - dy * sin(radians));
+			int newY = static_cast<int>(rows / 2 + dx * sin(radians) + dy * cos(radians));
+
+			// Copy pixel if within bounds
+			if (newX >= 0 && newX < cols && newY >= 0 && newY < rows)
+			{
+				rotatedArm[newY][newX * 4] = m_aidanArm[r][c * 4];       // Red
+				rotatedArm[newY][newX * 4 + 1] = m_aidanArm[r][c * 4 + 1]; // Green
+				rotatedArm[newY][newX * 4 + 2] = m_aidanArm[r][c * 4 + 2]; // Blue
+				rotatedArm[newY][newX * 4 + 3] = m_aidanArm[r][c * 4 + 3]; // Alpha
+			}
+		}
+	}
+}
+
+
+
+
 
 
 void CRotoScopeDoc::DrawLine(CGrImage &image, int x1, int y1, int x2, int y2, int width, int b, int g, int r)
@@ -1118,27 +1198,27 @@ void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY)
 		}
 	}
 
-	// Draw the arm (overlay directly on the body at its pre-aligned position)
-	for (int r = 0; r < m_aidanArm.GetHeight(); ++r)
-	{
-		for (int c = 0; c < m_aidanArm.GetWidth(); ++c)
-		{
-			// Calculate the arm's position relative to the canvas
-			int armX = c + bodyX;
-			int armY = r + bodyY;
+	//// Draw the arm (overlay directly on the body at its pre-aligned position)
+	//for (int r = 0; r < m_aidanArm.GetHeight(); ++r)
+	//{
+	//	for (int c = 0; c < m_aidanArm.GetWidth(); ++c)
+	//	{
+	//		// Calculate the arm's position relative to the canvas
+	//		int armX = c + bodyX;
+	//		int armY = r + bodyY;
 
-			// Ensure we stay within the canvas bounds
-			if (armY < image.GetHeight() && armX < image.GetWidth())
-			{
-				if (m_aidanArm[r][c * 4 + 3] >= 192) // Alpha check for non-transparency
-				{
-					image[armY][armX * 3] = m_aidanArm[r][c * 4];       // Red
-					image[armY][armX * 3 + 1] = m_aidanArm[r][c * 4 + 1]; // Green
-					image[armY][armX * 3 + 2] = m_aidanArm[r][c * 4 + 2]; // Blue
-				}
-			}
-		}
-	}
+	//		// Ensure we stay within the canvas bounds
+	//		if (armY < image.GetHeight() && armX < image.GetWidth())
+	//		{
+	//			if (m_aidanArm[r][c * 4 + 3] >= 192) // Alpha check for non-transparency
+	//			{
+	//				image[armY][armX * 3] = m_aidanArm[r][c * 4];       // Red
+	//				image[armY][armX * 3 + 1] = m_aidanArm[r][c * 4 + 1]; // Green
+	//				image[armY][armX * 3 + 2] = m_aidanArm[r][c * 4 + 2]; // Blue
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 

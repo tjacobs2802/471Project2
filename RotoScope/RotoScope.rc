@@ -172,7 +172,7 @@ BEGIN
         MENUITEM "Mario",                       ID_MOUSEMODE_MARIO
         MENUITEM "Julia",                       ID_MOUSEMODE_JULIA
         MENUITEM "Trevor",                      ID_MOUSEMODE_TREVOR
-        MENUITEM "Apply Wave Warp",             ID_MOUSEMODE_APPLYWAVEWARP
+        MENUITEM "Apply Wave Warp",             ID_EDIT_PLACEAIDAN
     END
     POPUP "&View"
     BEGIN
@@ -264,13 +264,14 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,198,155,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,252,155,50,14
-    LTEXT           "Arm Placement",IDC_STATIC,44,49,53,13
+    LTEXT           "Location",IDC_STATIC,43,50,53,13
     LTEXT           "X:",IDC_STATIC,39,67,8,8
     LTEXT           "Y:",IDC_STATIC,39,91,8,8
-    LTEXT           "Angle:",IDC_STATIC,38,110,22,8
+    LTEXT           "Angle:",IDC_STATIC,35,137,22,8
     EDITTEXT        IDC_m_x,52,65,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_m_y,52,89,40,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_m_angle,60,108,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_m_angle,59,136,40,14,ES_AUTOHSCROLL
+    LTEXT           "Arm Angle",IDC_STATIC,45,120,53,13
 END
 
 

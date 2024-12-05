@@ -78,9 +78,7 @@ private:
 	
 	CGrImage			m_aidan;
 	CGrImage			m_aidanArm;
-	CPoint m_pivot;            // Pivot point for arm rotation
-	double m_currentAngle = 0; // Current rotation angle of the arm
-	bool m_isDragging = false; // Whether the mouse is dragging the arm
+	CGrImage			rotatedArm;
 
 	CGrImage			m_julia;
 
@@ -145,6 +143,8 @@ public:
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); 
 	void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY);
 	afx_msg void OnMousemodeAidan(); 
+	void CRotoScopeDoc::RotateArm(double angle, CGrImage& rotatedArm);
+
 
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
 
