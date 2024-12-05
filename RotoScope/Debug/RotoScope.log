@@ -12,6 +12,7 @@ C:\Users\aidan\source\repos\471Project2\RotoScope\RotoScopeDoc.cpp(1008,13): war
   Generating Code...
   RotoScope.vcxproj -> C:\Users\aidan\Source\Repos\471Project2\Debug\RotoScope.exe
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿  RotoScopeDoc.cpp
 C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(794,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(795,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
@@ -22,10 +23,11 @@ C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(983,13
   ChildFrm.cpp
   DirSoundSource.cpp
   GrImage.cpp
+=======
+﻿  ChildFrm.cpp
+>>>>>>> inital commit
   LineDlg.cpp
   MainFrm.cpp
-  MovieMake.cpp
-  MovieSource.cpp
   RotoScope.cpp
   RotoScopeDoc.cpp
 \\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(787,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
@@ -33,6 +35,5 @@ C:\Users\tjaco\source\repos\cse471\CSE471Proj2\RotoScope\RotoScopeDoc.cpp(983,13
 \\mac\Home\Desktop\471Project2\RotoScope\RotoScopeDoc.cpp(976,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   RotoScopeView.cpp
   Generating Code...
-ChildFrm.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   RotoScope.vcxproj -> \\Mac\Home\Desktop\471Project2\Debug\RotoScope.exe
 >>>>>>> greg's commit
