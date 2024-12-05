@@ -76,6 +76,8 @@ private:
 	
 	CGrImage			m_aidan;
 
+	CGrImage			m_julia;
+
 
 	int m_x1;
 	int m_y1;
@@ -127,6 +129,7 @@ public:
 	afx_msg void OnEditUndo32793();
 
 	void ApplyWaveEffect(); // julia
+	void CRotoScopeDoc::DrawJulia(CGrImage& image, int x1, int y1);
 	
 	//Aidan
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); 
@@ -139,6 +142,7 @@ public:
 	afx_msg void OnEditPlacemario(); //Trevor
 	
 	afx_msg void OnMousemodeMario();
+	afx_msg void OnMousemodeJulia();
 };
 
 
