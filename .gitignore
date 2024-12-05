@@ -1,7 +1,17 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
 /.vs
 /Debug
 /RotoScope/Debug
+.vs/
+Debug/
+.gitignore
+.DS_Store
+/RotoScope/Debug/RotoScope.tlog/Cl.items.tlog
+/RotoScope/Debug/RotoScope.tlog/link.read.1.tlog
+/RotoScope/Debug/RotoScope.tlog/link.command.1.tlog
+/RotoScope/Debug/RotoScope.tlog/link.secondary.1.tlog
+/RotoScope/Debug/RotoScope.tlog/RotoScope.lastbuildstate
+/RotoScope/Debug/RotoScope.exe.recipe

@@ -7,6 +7,7 @@
 
 #include "RotoScopeDoc.h"
 #include "xmlhelp.h"
+#include "CMorph.h"
 
 
 #ifdef _DEBUG
@@ -56,6 +57,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_TREVOR, &CRotoScopeDoc::OnMousemodeTrevor)
 	ON_COMMAND(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnMousemodeApplywavewarp)
 	ON_COMMAND(ID_EDIT_PLACEAIDAN, &CRotoScopeDoc::OnEditPlaceaidan)
+	ON_COMMAND(ID_MOUSEMODE_GREG, &CRotoScopeDoc::OnMousemodeGreg)
 END_MESSAGE_MAP()
 
 
@@ -81,6 +83,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_julia.LoadFile(L"julia.png");
 	m_fireworks.LoadFile(L"fireworks.png");
 	m_trevor.LoadFile(L"trevor.png");
+	m_greg.LoadFile(L"greg.png");
 
 	m_moviemake.SetProfileName(L"profile720p.prx");
 
@@ -499,6 +502,11 @@ void CRotoScopeDoc::Mouse(int p_x, int p_y)
 
 	else if (m_mode == 6) {
 		DrawTrevor(m_image, x, y);
+		UpdateAllViews(NULL);
+	}
+
+	else if (m_mode == 7) {
+		DrawGreg(m_image, x, y);
 		UpdateAllViews(NULL);
 	}
 }
@@ -1250,26 +1258,44 @@ void CRotoScopeDoc::DrawJulia(CGrImage& image, int x1, int y1)
 
 void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
 {
-	//allow undo of placing
+	// Allow undo of placing
 	m_images.push(m_image);
-	for (int r = 0; r < m_mario.GetHeight(); r++)
-	{
-		for (int c = 0; c < m_mario.GetWidth(); c++)
-		{
-			//make sure point is inside image
-			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
-			{
-				if (m_mario[r][c * 4 + 3] >= 192)
-				{
-					m_image[r + y1][(c + x1) * 3] = m_mario[r][c * 4];
-					m_image[r + y1][(c + x1) * 3 + 1] = m_mario[r][c * 4 + 1];
-					m_image[r + y1][(c + x1) * 3 + 2] = m_mario[r][c * 4 + 2];
+
+	CGrImage* imageToUse;
+
+	if (m_morphEnabled) {
+		// Morphing is enabled: create a morphed image
+		CMorph morph;
+		static double alpha = 0.5; // Adjust alpha as needed
+		imageToUse = new CGrImage(morph.MorphImages(m_aidan, m_mario, alpha));
+	}
+	else {
+		// Use the standard Mario image
+		imageToUse = &m_mario;
+	}
+
+	// Overlay the selected image onto m_image
+	for (int r = 0; r < imageToUse->GetHeight(); r++) {
+		for (int c = 0; c < imageToUse->GetWidth(); c++) {
+			// Ensure the pixel is within bounds of the main image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth()) {
+				if ((*imageToUse)[r][c * 4 + 3] >= 192) {
+					m_image[r + y1][(c + x1) * 3] = (*imageToUse)[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = (*imageToUse)[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = (*imageToUse)[r][c * 4 + 2];
 				}
 			}
 		}
 	}
-}
 
+	// If we allocated a new image, delete it to avoid memory leaks
+	if (m_morphEnabled) {
+		delete imageToUse;
+	}
+
+	// Update the view to reflect changes
+	UpdateAllViews(NULL);
+}
 void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1)
 {
 	//allow undo of placing
@@ -1292,6 +1318,27 @@ void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1)
 	}
 }
 
+void CRotoScopeDoc::DrawGreg(CGrImage& image, int x1, int y1)
+{
+	//allow undo of placing
+	m_images.push(m_image);
+	for (int r = 0; r < m_greg.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_greg.GetWidth(); c++)
+		{
+			//make sure point is inside image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
+			{
+				if (m_greg[r][c * 4 + 3] >= 192)
+				{
+					m_image[r + y1][(c + x1) * 3] = m_greg[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_greg[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_greg[r][c * 4 + 2];
+				}
+			}
+		}
+	}
+}
 
 void CRotoScopeDoc::OnEditRotateimage()
 {
@@ -1422,4 +1469,10 @@ void CRotoScopeDoc::OnMousemodeApplywavewarp()
 	ApplyWaveEffect();        // Apply the wave effect
 	m_applyWaveEffect = false; // Reset the flag after the effect is applied
 	UpdateAllViews(NULL);
+}
+
+
+void CRotoScopeDoc::OnMousemodeGreg()
+{
+	m_mode = 7;
 }

@@ -172,6 +172,8 @@ BEGIN
         MENUITEM "Mario",                       ID_MOUSEMODE_MARIO
         MENUITEM "Julia",                       ID_MOUSEMODE_JULIA
         MENUITEM "Trevor",                      ID_MOUSEMODE_TREVOR
+        MENUITEM "Apply Wave Warp",             ID_MOUSEMODE_APPLYWAVEWARP
+        MENUITEM "Greg",                        ID_MOUSEMODE_GREG
         MENUITEM "Apply Wave Warp",             ID_EDIT_PLACEAIDAN
     END
     POPUP "&View"
