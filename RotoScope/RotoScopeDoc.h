@@ -15,6 +15,7 @@
 #include "audio/DirSoundSource.h"
 #include "graphics/GrImage.h"
 #include "LineDlg.h"
+#include "ArmDlg.h"
 
 /*! \mainpage RotoScope Starter Appliaidanion
  *
@@ -70,11 +71,16 @@ private:
 	std::vector<std::list<CPoint> >     m_draw;
 	CGrImage			m_initial;
 	CLineDlg			m_dlg;
+	armDlg				m_armDlg;
 	CGrImage			m_bird;
 	CGrImage			m_mario;
 	
 	
 	CGrImage			m_aidan;
+	CGrImage			m_aidanArm;
+	CPoint m_pivot;            // Pivot point for arm rotation
+	double m_currentAngle = 0; // Current rotation angle of the arm
+	bool m_isDragging = false; // Whether the mouse is dragging the arm
 
 	CGrImage			m_julia;
 
@@ -123,7 +129,7 @@ public:
 	afx_msg void OnEditDrawline();
 	afx_msg void OnEditPlacebird();
 	void DrawBird(CGrImage &image, int x1, int y1);
-	void RotateImage(CGrImage &image, int theta);
+	void CRotoScopeDoc::RotateImage(CGrImage& image, int theta);
 	afx_msg void OnEditRotateimage();
 	afx_msg void OnEditSetvariables();
 	afx_msg void OnMousemodePen();
@@ -136,8 +142,7 @@ public:
 	
 	//Aidan
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); 
-	void CRotoScopeDoc::RotateElement(CGrImage& element, float angle, int centerX, int centerY); 
-	void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1); 
+	void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY);
 	afx_msg void OnMousemodeAidan(); 
 
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
@@ -152,6 +157,7 @@ public:
 	void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1); //Trevor
 
 	afx_msg void OnMousemodeTrevor();
+	afx_msg void OnEditPlaceaidan();
 };
 
 

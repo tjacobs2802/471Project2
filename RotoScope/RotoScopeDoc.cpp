@@ -54,6 +54,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_EDIT_PLACEMARIO, &CRotoScopeDoc::OnEditPlacemario)
 	ON_COMMAND(ID_MOUSEMODE_JULIA, &CRotoScopeDoc::OnMousemodeJulia)
 	ON_COMMAND(ID_MOUSEMODE_TREVOR, &CRotoScopeDoc::OnMousemodeTrevor)
+	ON_COMMAND(ID_EDIT_PLACEAIDAN, &CRotoScopeDoc::OnEditPlaceaidan)
 END_MESSAGE_MAP()
 
 
@@ -74,6 +75,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_bird.LoadFile(L"birdp.png");
 	m_mario.LoadFile(L"mario.png");
 	m_aidan.LoadFile(L"aidan.png");
+	m_aidanArm.LoadFile(L"aidanArm.png");
 	m_julia.LoadFile(L"julia.png");
 	m_fireworks.LoadFile(L"fireworks.png");
 	m_trevor.LoadFile(L"trevor.png");
@@ -429,11 +431,11 @@ void CRotoScopeDoc::OnFramesWritethencreateremaining()
 //! pressed or moved on the screen.
 /*! It sets the associated pixel in the image to red right now. You'll 
  * likely make it do something different
- * \param p_x X loaidanion in image
- * \param p_y Y loaidanion in image */
+ * \param p_x X location in image
+ * \param p_y Y location in image */
 void CRotoScopeDoc::Mouse(int p_x, int p_y)
 {
-	// We need to convert screen loaidanions to image loaidanions
+	// We need to convert screen locations to image locations
 	int x = p_x;                            // No problem there.
 	int y = m_image.GetHeight() - p_y - 1;     // Just invert it.
 
@@ -898,6 +900,25 @@ void CRotoScopeDoc::OnEditPlacemario()
 	}
 }
 
+void CRotoScopeDoc::OnEditPlaceaidan()
+{
+	if (m_armDlg.DoModal() == IDOK)
+	{
+		int armX = m_armDlg.m_x;
+		int armY = m_armDlg.m_y;
+		double angle = m_armDlg.m_angle;
+
+		// Clear the canvas
+		m_image.Fill(0, 0, 0);
+
+		// Draw yourself and your arm
+		DrawAidan(m_image, armX, armY);
+
+		// Refresh the view
+		UpdateAllViews(NULL);
+	}
+}
+
 
 void CRotoScopeDoc::DrawLine(CGrImage &image, int x1, int y1, int x2, int y2, int width, int b, int g, int r)
 {
@@ -1073,27 +1094,53 @@ void CRotoScopeDoc::DrawFireworks(CGrImage& image, int x1, int y1)
 	}
 }
 
-void CRotoScopeDoc::DrawAidan(CGrImage& image, int x1, int y1)
+void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY)
 {
-	//allow undo of placing
-	m_images.push(m_image);
-	for (int r = 0; r < m_aidan.GetHeight(); r++)
+	// Draw the body (yourself)
+	for (int r = 0; r < m_aidan.GetHeight(); ++r)
 	{
-		for (int c = 0; c < m_aidan.GetWidth(); c++)
+		for (int c = 0; c < m_aidan.GetWidth(); ++c)
 		{
-			//make sure point is inside image
-			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
+			// Ensure we stay within the canvas bounds
+			if (r + bodyY < image.GetHeight() && c + bodyX < image.GetWidth())
 			{
-				if (m_aidan[r][c * 4 + 3] >= 192)
+				if (m_aidan[r][c * 4 + 3] >= 192) // Alpha check for non-transparency
 				{
-					m_image[r + y1][(c + x1) * 3] = m_aidan[r][c * 4];
-					m_image[r + y1][(c + x1) * 3 + 1] = m_aidan[r][c * 4 + 1];
-					m_image[r + y1][(c + x1) * 3 + 2] = m_aidan[r][c * 4 + 2];
+					image[r + bodyY][(c + bodyX) * 3] = m_aidan[r][c * 4];       // Red
+					image[r + bodyY][(c + bodyX) * 3 + 1] = m_aidan[r][c * 4 + 1]; // Green
+					image[r + bodyY][(c + bodyX) * 3 + 2] = m_aidan[r][c * 4 + 2]; // Blue
+				}
+			}
+		}
+	}
+
+	// Draw the arm (overlay directly on the body at its pre-aligned position)
+	for (int r = 0; r < m_aidanArm.GetHeight(); ++r)
+	{
+		for (int c = 0; c < m_aidanArm.GetWidth(); ++c)
+		{
+			// Calculate the arm's position relative to the canvas
+			int armX = c + bodyX;
+			int armY = r + bodyY;
+
+			// Ensure we stay within the canvas bounds
+			if (armY < image.GetHeight() && armX < image.GetWidth())
+			{
+				if (m_aidanArm[r][c * 4 + 3] >= 192) // Alpha check for non-transparency
+				{
+					image[armY][armX * 3] = m_aidanArm[r][c * 4];       // Red
+					image[armY][armX * 3 + 1] = m_aidanArm[r][c * 4 + 1]; // Green
+					image[armY][armX * 3 + 2] = m_aidanArm[r][c * 4 + 2]; // Blue
 				}
 			}
 		}
 	}
 }
+
+
+
+
+
 
 void CRotoScopeDoc::DrawJulia(CGrImage& image, int x1, int y1)
 {
@@ -1219,8 +1266,15 @@ void CRotoScopeDoc::OnMousemodeMario()
 	m_mode = 4;
 }
 
+void CRotoScopeDoc::OnMousemodeJulia()
+{
+	m_mode = 5;
+}
 
-
+void CRotoScopeDoc::OnMousemodeTrevor()
+{
+	m_mode = 6;
+}
 
 
 void CRotoScopeDoc::OnEditUndo32793()
@@ -1275,20 +1329,4 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 			output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
 		}
 	}
-}
-
-
-
-
-void CRotoScopeDoc::OnMousemodeJulia()
-{
-	m_mode = 5;
-}
-
-
-
-
-void CRotoScopeDoc::OnMousemodeTrevor()
-{
-	m_mode = 6;
 }

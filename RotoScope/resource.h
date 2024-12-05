@@ -7,10 +7,14 @@
 #define IDR_MAINFRAME                   128
 #define IDR_RotoScopeTYPE               129
 #define IDD_LINEDLG                     130
+#define IDD_armDlg                      132
 #define IDC_X1                          1000
 #define IDC_X2                          1001
+#define IDC_m_x                         1001
 #define IDC_Y1                          1002
+#define IDC_m_y                         1002
 #define IDC_Y2                          1003
+#define IDC_m_angle                     1003
 #define IDC_B                           1004
 #define IDC_G                           1005
 #define IDC_R                           1006
@@ -41,14 +45,15 @@
 #define ID_MOUSEMODE_AIDAN              32797
 #define ID_MOUSEMODE_JULIA              32798
 #define ID_MOUSEMODE_TREVOR             32799
+#define ID_EDIT_PLACEAIDAN              32800
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32800
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_COMMAND_VALUE         32801
+#define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

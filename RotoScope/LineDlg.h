@@ -29,4 +29,6 @@ public:
 	int m_g;
 	int m_r;
 	int m_width;
+	afx_msg void OnEnChangeB();
+	afx_msg void OnEnChangeW();
 };

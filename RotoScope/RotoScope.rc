@@ -140,6 +140,7 @@ BEGIN
         MENUITEM "Rotate Image",                ID_EDIT_ROTATEIMAGE
         MENUITEM "Place Bird",                  ID_EDIT_PLACEBIRD
         MENUITEM "Place Mario",                 ID_EDIT_PLACEMARIO
+        MENUITEM "Place Aidan",                 ID_EDIT_PLACEAIDAN
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
     END
     POPUP "&Movies"
@@ -255,6 +256,22 @@ BEGIN
     EDITTEXT        IDC_W,37,72,40,14,ES_AUTOHSCROLL
 END
 
+IDD_armDlg DIALOGEX 0, 0, 309, 176
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,198,155,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,252,155,50,14
+    LTEXT           "Arm Placement",IDC_STATIC,44,49,53,13
+    LTEXT           "X:",IDC_STATIC,39,67,8,8
+    LTEXT           "Y:",IDC_STATIC,39,91,8,8
+    LTEXT           "Angle:",IDC_STATIC,38,110,22,8
+    EDITTEXT        IDC_m_x,52,65,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_m_y,52,89,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_m_angle,60,108,40,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -318,6 +335,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 94
     END
+
+    IDD_armDlg, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -328,6 +353,11 @@ END
 //
 
 IDD_LINEDLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_armDlg AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
