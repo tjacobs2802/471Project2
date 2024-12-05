@@ -53,6 +53,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_MARIO, &CRotoScopeDoc::OnMousemodeMario)
 	ON_COMMAND(ID_EDIT_PLACEMARIO, &CRotoScopeDoc::OnEditPlacemario)
 	ON_COMMAND(ID_MOUSEMODE_JULIA, &CRotoScopeDoc::OnMousemodeJulia)
+	ON_COMMAND(ID_MOUSEMODE_TREVOR, &CRotoScopeDoc::OnMousemodeTrevor)
 END_MESSAGE_MAP()
 
 
@@ -75,6 +76,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_aidan.LoadFile(L"aidan.png");
 	m_julia.LoadFile(L"julia.png");
 	m_fireworks.LoadFile(L"fireworks.png");
+	m_trevor.LoadFile(L"trevor.png");
 
 	m_moviemake.SetProfileName(L"profile720p.prx");
 
@@ -488,6 +490,11 @@ void CRotoScopeDoc::Mouse(int p_x, int p_y)
 
 	else if (m_mode == 5) {
 		DrawJulia(m_image, x, y);
+		UpdateAllViews(NULL);
+	}
+
+	else if (m_mode == 6) {
+		DrawTrevor(m_image, x, y);
 		UpdateAllViews(NULL);
 	}
 }
@@ -1132,6 +1139,27 @@ void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
 	}
 }
 
+void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1)
+{
+	//allow undo of placing
+	m_images.push(m_image);
+	for (int r = 0; r < m_trevor.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_trevor.GetWidth(); c++)
+		{
+			//make sure point is inside image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
+			{
+				if (m_trevor[r][c * 4 + 3] >= 192)
+				{
+					m_image[r + y1][(c + x1) * 3] = m_trevor[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_trevor[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_trevor[r][c * 4 + 2];
+				}
+			}
+		}
+	}
+}
 
 
 void CRotoScopeDoc::OnEditRotateimage()
@@ -1255,4 +1283,12 @@ void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrIma
 void CRotoScopeDoc::OnMousemodeJulia()
 {
 	m_mode = 5;
+}
+
+
+
+
+void CRotoScopeDoc::OnMousemodeTrevor()
+{
+	m_mode = 6;
 }

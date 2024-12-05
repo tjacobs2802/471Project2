@@ -170,6 +170,7 @@ BEGIN
         MENUITEM "Aidan",                       ID_MOUSEMODE_AIDAN
         MENUITEM "Mario",                       ID_MOUSEMODE_MARIO
         MENUITEM "Julia",                       ID_MOUSEMODE_JULIA
+        MENUITEM "Trevor",                      ID_MOUSEMODE_TREVOR
     END
     POPUP "&View"
     BEGIN
