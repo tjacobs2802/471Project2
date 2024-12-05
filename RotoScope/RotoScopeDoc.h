@@ -142,6 +142,7 @@ public:
 
 	void ApplyWaveEffect(); // julia
 	void CRotoScopeDoc::DrawJulia(CGrImage& image, int x1, int y1);
+	void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage);
 	
 	//Aidan
 	void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask); 
@@ -168,6 +169,7 @@ public:
 	afx_msg void OnMousemodeGreg();
 	afx_msg void OnEditMorph();
 	afx_msg void OnUpdateEditMorph(CCmdUI* pCmdUI);
+	afx_msg void OnMousemodeRecolor();
 };
 
 

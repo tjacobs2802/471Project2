@@ -60,6 +60,7 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_GREG, &CRotoScopeDoc::OnMousemodeGreg)
 	ON_COMMAND(ID_EDIT_MORPH, &CRotoScopeDoc::OnEditMorph)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_MORPH, &CRotoScopeDoc::OnUpdateEditMorph)
+	ON_COMMAND(ID_MOUSEMODE_RECOLOR, &CRotoScopeDoc::OnMousemodeRecolor)
 END_MESSAGE_MAP()
 
 
@@ -1494,4 +1495,48 @@ void CRotoScopeDoc::OnEditMorph()
 void CRotoScopeDoc::OnUpdateEditMorph(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_morphEnabled);
+}
+
+void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage)
+{
+	int redThresholdLow = 100;
+	int redThresholdHigh = 255;
+	int greenThresholdMax = 100;
+	int blueThresholdMax = 100;
+
+	outputImage.SetSameSize(inputImage);
+	for (int y = 0; y < inputImage.GetHeight(); ++y)
+	{
+		for (int x = 0; x < inputImage.GetWidth(); ++x)
+		{
+			int r = inputImage[y][x * 3];
+			int g = inputImage[y][x * 3 + 1];
+			int b = inputImage[y][x * 3 + 2];
+
+			if (r >= redThresholdLow && r <= redThresholdHigh && g <= greenThresholdMax && b <= blueThresholdMax)
+			{
+				int newR = (std::max)(0, r - 50);
+				int newB = (std::min)(255, r + 50);
+				outputImage.Set(x, y, newR, g, newB);
+			}
+			else
+			{
+				outputImage.Set(x, y, r, g, b);
+			}
+		}
+	}
+}
+
+
+
+void CRotoScopeDoc::OnMousemodeRecolor()
+{
+	CGrImage originalImage = m_image;
+	CGrImage recoloredImage;
+
+	RecolorRedToBlue(originalImage, recoloredImage);
+
+	m_image = recoloredImage;
+
+	UpdateAllViews(NULL);
 }
