@@ -79,6 +79,7 @@ private:
 	CGrImage			m_aidan;
 	CGrImage			m_aidanArm;
 	CGrImage			rotatedArm;
+	CGrImage			m_chromaKeyBackground; // Shared background for green/blue screen
 
 	CGrImage			m_julia;
 
@@ -105,6 +106,7 @@ private:
 	bool m_waveEnabled;
 	CGrImage m_tempImage;
 	bool m_greenScreenEnabled;
+	bool m_blueScreenEnabled;
 
 	std::stack<CGrImage>	m_images;
 	bool m_applyWaveEffect;
@@ -152,6 +154,10 @@ public:
 	void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY);
 	afx_msg void OnMousemodeAidan(); 
 	void CRotoScopeDoc::RotateArm(double angle, CGrImage& rotatedArm);
+	afx_msg void OnEditBluescreen();
+	afx_msg void OnEditChoosebackground();
+	void CRotoScopeDoc::OnUpdateEditBluescreen(CCmdUI* pCmdUI);
+	
 
 
 	void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1); //Trevor
@@ -176,6 +182,7 @@ public:
 	afx_msg void OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI);
 	afx_msg void OnEditGreenscreen();
 	afx_msg void OnUpdateEditGreenscreen(CCmdUI* pCmdUI);
+
 };
 
 

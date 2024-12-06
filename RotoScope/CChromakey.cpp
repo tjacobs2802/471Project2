@@ -2,12 +2,20 @@
 #include <stdexcept>
 #include <cmath>
 
-CChromakey::CChromakey(double greenThreshold, int minGreenIntensity, double shadowToleranceFactor) {
-    m_greenThreshold = greenThreshold;
-    m_minGreenIntensity = minGreenIntensity;
-    m_shadowToleranceFactor = shadowToleranceFactor;
+CChromakey::CChromakey(double chromaThreshold, int minChromaIntensity, double shadowToleranceFactor, const std::string& chromaKeyColor)
+    : m_chromaThreshold(chromaThreshold),
+    m_minChromaIntensity(minChromaIntensity),
+    m_shadowToleranceFactor(shadowToleranceFactor),
+    m_chromaKeyColor(chromaKeyColor)
+{
+    if (m_chromaKeyColor != "green" && m_chromaKeyColor != "blue")
+    {
+        throw std::invalid_argument("Chroma key color must be 'green' or 'blue'.");
+    }
+
     m_garbageMask.LoadFile(L"garbagemask.png");
 }
+
 
 void CChromakey::ResizeGarbageMask(int width, int height) {
     if (m_garbageMask.GetWidth() != width || m_garbageMask.GetHeight() != height) {
@@ -38,23 +46,53 @@ void CChromakey::ResizeGarbageMask(int width, int height) {
     }
 }
 
-CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& background) {
-    if (foreground.GetWidth() != background.GetWidth() || foreground.GetHeight() != background.GetHeight()) {
-        throw std::runtime_error("Foreground and background must have the same dimensions.");
+CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& background)
+{
+    int fgWidth = foreground.GetWidth();
+    int fgHeight = foreground.GetHeight();
+    int bgWidth = background.GetWidth();
+    int bgHeight = background.GetHeight();
+
+    // Ensure the background matches the foreground dimensions
+    CGrImage adjustedBackground;
+    if (fgWidth != bgWidth || fgHeight != bgHeight)
+    {
+        adjustedBackground.SetSize(fgWidth, fgHeight);
+
+        for (int y = 0; y < fgHeight; y++)
+        {
+            for (int x = 0; x < fgWidth; x++)
+            {
+                // Map the new pixel location to the background's coordinates
+                int srcX = x * bgWidth / fgWidth;
+                int srcY = y * bgHeight / fgHeight;
+
+                // Copy the nearest pixel's RGB values from the background
+                const unsigned char* srcPixel = background[srcY] + srcX * 3;
+                unsigned char* destPixel = adjustedBackground[y] + x * 3;
+
+                destPixel[0] = srcPixel[0]; // R
+                destPixel[1] = srcPixel[1]; // G
+                destPixel[2] = srcPixel[2]; // B
+            }
+        }
+    }
+    else
+    {
+        adjustedBackground = background; // Use the original background if sizes match
     }
 
-    int width = foreground.GetWidth();
-    int height = foreground.GetHeight();
-
-    // Resize the garbage mask to match the size of the foreground/background
-    ResizeGarbageMask(width, height);
+    // Resize the garbage mask to match the foreground/background
+    ResizeGarbageMask(fgWidth, fgHeight);
 
     // Create the output image
     CGrImage output;
     output.SetSameSize(foreground);
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int y = 0; y < fgHeight; y++)
+    {
+        for (int x = 0; x < fgWidth; x++)
+        {
             int idx = x * 3;
 
             // Foreground pixel components
@@ -63,8 +101,8 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
             double fgG = static_cast<double>(fgRow[idx + 1]);
             double fgB = static_cast<double>(fgRow[idx + 2]);
 
-            // Background pixel components
-            const unsigned char* bgRow = background[y];
+            // Adjusted background pixel components
+            const unsigned char* bgRow = adjustedBackground[y];
             double bgR = static_cast<double>(bgRow[idx]);
             double bgG = static_cast<double>(bgRow[idx + 1]);
             double bgB = static_cast<double>(bgRow[idx + 2]);
@@ -73,27 +111,38 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
             const unsigned char* maskRow = m_garbageMask[y];
             double maskValue = static_cast<double>(maskRow[idx]) / 255.0;
 
-            // Compute green dominance
-            double greenDominance = fgG / (fgR + fgG + fgB + 0.001);
+            // Compute chroma dominance
+            double chromaDominance;
+            if (m_chromaKeyColor == "green")
+            {
+                chromaDominance = fgG / (fgR + fgG + fgB + 0.001);
+            }
+            else if (m_chromaKeyColor == "blue")
+            {
+                chromaDominance = fgB / (fgR + fgG + fgB + 0.001);
+            }
+
 
             // Compute alpha
             double alpha = 1.0;
-            if (fgG > m_minGreenIntensity && fgG > fgR * m_shadowToleranceFactor &&
-                fgG > fgB * m_shadowToleranceFactor && greenDominance > m_greenThreshold) {
+            if ((m_chromaKeyColor == "green" && fgG > m_minChromaIntensity && fgG > fgR * m_shadowToleranceFactor && fgG > fgB * m_shadowToleranceFactor && chromaDominance > m_chromaThreshold) ||
+                (m_chromaKeyColor == "blue" && fgB > m_minChromaIntensity && fgB > fgR * m_shadowToleranceFactor && fgB > fgG * m_shadowToleranceFactor && chromaDominance > m_chromaThreshold))
+            {
                 alpha = 0.0;
             }
 
             // Modify alpha based on garbage mask
-            if (maskValue == 0.0) {
-                // Garbage mask is black: use background pixel directly
-                alpha = 0.0;
+            if (maskValue == 0.0)
+            {
+                alpha = 0.0; // Garbage mask is black: use background pixel directly
             }
-            else if (maskValue == 1.0) {
+            else if (maskValue == 1.0)
+            {
                 // Garbage mask is white: fully apply alpha blending (keep calculated alpha)
             }
-            else {
-                // Garbage mask is gray: interpolate between alpha blending and background
-                alpha = alpha * maskValue;
+            else
+            {
+                alpha = alpha * maskValue; // Garbage mask is gray: interpolate between alpha blending and background
             }
 
             // Compute the output pixel
@@ -111,49 +160,4 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
 
     return output;
 }
-// Aidan's project
-/*
-void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
-{
-    // Define the target key color for blue screen
-    const double key_r = 0.0; // Red component of blue screen color
-    const double key_g = 0.0; // Green component of blue screen color
-    const double key_b = 255.0; // Blue component of blue screen color
 
-    // Ensure the output image has the same dimensions as the foreground
-    output.SetSameSize(foreground);
-
-    // Iterate over every pixel in the foreground image
-    for (int y = 0; y < foreground.GetHeight(); ++y)
-    {
-        for (int x = 0; x < foreground.GetWidth(); ++x)
-        {
-            // Foreground color
-            double r = foreground[y][x * 3];
-            double g = foreground[y][x * 3 + 1];
-            double b = foreground[y][x * 3 + 2];
-
-            // Background color
-            double bg_r = background[y][x * 3];
-            double bg_g = background[y][x * 3 + 1];
-            double bg_b = background[y][x * 3 + 2];
-
-            // Calculate alpha value using the Vlahos equation
-            double alpha = 1.0 - min(1.0, (b - key_b) / 255.0);
-            alpha = max(0.0, min(alpha, 1.0)); // Ensure alpha is within [0, 1]
-
-            // Apply the garbage mask to adjust the alpha value
-            double mask_value = garbageMask[y][x * 3] / 255.0; // Normalize the garbage mask pixel to [0, 1]
-            alpha *= (1.0 - mask_value); // Reduce alpha based on the garbage mask
-
-            // Blend the pixels based on the alpha value
-            double out_r = alpha * r + (1.0 - alpha) * bg_r;
-            double out_g = alpha * g + (1.0 - alpha) * bg_g;
-            double out_b = alpha * b + (1.0 - alpha) * bg_b;
-
-            // Write the blended color to the output image
-            output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
-        }
-    }
-}
-*/

@@ -144,6 +144,8 @@ BEGIN
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
         MENUITEM "Mario Morph",                 ID_EDIT_MORPH
         MENUITEM "Green Screen",                ID_EDIT_GREENSCREEN
+        MENUITEM "Blue Screen",                 ID_EDIT_BLUESCREEN
+        MENUITEM "Choose Background",           ID_EDIT_CHOOSEBACKGROUND
     END
     POPUP "&Movies"
     BEGIN

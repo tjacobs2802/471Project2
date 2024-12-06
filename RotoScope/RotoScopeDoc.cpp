@@ -67,6 +67,9 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GREENSCREEN, &CRotoScopeDoc::OnUpdateEditGreenscreen)
 	ON_COMMAND(ID_MOUSEMODE_RECOLOR, &CRotoScopeDoc::OnMousemodeRecolor)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
+	ON_COMMAND(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnEditBluescreen)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnUpdateEditBluescreen)
+	ON_COMMAND(ID_EDIT_CHOOSEBACKGROUND, &CRotoScopeDoc::OnEditChoosebackground)
 END_MESSAGE_MAP()
 
 
@@ -814,18 +817,27 @@ void CRotoScopeDoc::DrawImage()
 {
 	CGrImage tempImage;
 	tempImage = m_initial;
-	if (m_greenScreenEnabled)
-	{	
-		CChromakey chromakey(0.0, 95, 1.1);
-		CGrImage background;
 
-		background.SetSameSize(m_initial);
-		background.Fill(225, 0, 0);
+	if (m_greenScreenEnabled || m_blueScreenEnabled)
+	{
+		// Determine the chroma key color
+		std::string chromaKeyColor = m_greenScreenEnabled ? "green" : "blue";
 
-		tempImage = chromakey.Apply(m_initial, background);
-		
+		// If no background is loaded, use a solid color as fallback
+		if (m_chromaKeyBackground.GetWidth() == 0 || m_chromaKeyBackground.GetHeight() == 0)
+		{
+			m_chromaKeyBackground.SetSameSize(m_initial);
+			m_chromaKeyBackground.Fill(225, 0, 0); // Default solid red background
+		}
+
+		// Initialize the chroma keyer with appropriate parameters
+		CChromakey chromakey(0.0, 95, 1.1, chromaKeyColor);
+
+		// Apply chroma keying with the chosen background
+		tempImage = chromakey.Apply(m_initial, m_chromaKeyBackground);
 	}
-	// Write image from tempImage into the current image
+
+	// Write the processed image from tempImage into the current image
 	for (int r = 0; r < m_image.GetHeight() && r < tempImage.GetHeight(); r++)
 	{
 		for (int c = 0; c < m_image.GetWidth() && c < tempImage.GetWidth(); c++)
@@ -849,24 +861,9 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
-	// Add Mario sprite (or other specific drawings)
-	/*
-	for (int r = 0; r < m_mario.GetHeight(); r++)
-	{
-		for (int c = 0; c < m_mario.GetWidth(); c++)
-		{
-			if (m_mario[r][c * 4 + 3] >= 192) // Alpha channel check
-			{
-				m_image[r][c * 3] = m_mario[r][c * 4];
-				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
-				m_image[r][c * 3 + 2] = m_mario[r][c * 4 + 2];
-			}
-		}
-	}
-	*/
-
 	UpdateAllViews(NULL);
 }
+
 
 void CRotoScopeDoc::OnEditDrawline()
 {
@@ -925,8 +922,6 @@ void CRotoScopeDoc::OnEditPlaceaidan()
 		int offsetX = 37;  // Example X offset for shoulder
 		int offsetY = 67;  // Example Y offset for shoulder
 
-		// Clear the canvas
-		m_image.Fill(0, 0, 0);
 
 		// Draw the body at the pivot point
 		DrawAidan(m_image, x, y);
@@ -1205,6 +1200,7 @@ void CRotoScopeDoc::DrawAidan(CGrImage& image, int bodyX, int bodyY)
 				}
 			}
 		}
+
 	}
 
 	//// Draw the arm (overlay directly on the body at its pre-aligned position)
@@ -1457,6 +1453,22 @@ void CRotoScopeDoc::OnUpdateEditGreenscreen(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_greenScreenEnabled);
 }
 
+void CRotoScopeDoc::OnUpdateEditBluescreen(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_blueScreenEnabled);
+}
+
+
+void CRotoScopeDoc::OnEditBluescreen()
+{
+	if (m_blueScreenEnabled) {
+		m_blueScreenEnabled = false;
+	}
+	else {
+		m_blueScreenEnabled = true;
+	}
+}
+
 void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage)
 {
 	int redThresholdLow = 100;
@@ -1551,3 +1563,26 @@ void CRotoScopeDoc::OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_waveEnabled);
 }
+
+
+
+
+void CRotoScopeDoc::OnEditChoosebackground()
+{
+	CFileDialog fileDlg(TRUE, NULL, NULL, OFN_FILEMUSTEXIST, _T("Image Files|*.bmp;*.png;*.jpg;*.jpeg|All Files|*.*||"));
+	if (fileDlg.DoModal() == IDOK)
+	{
+		CString path = fileDlg.GetPathName();
+
+		// Load the selected image as the background
+		if (!m_chromaKeyBackground.LoadFile((LPCTSTR)path))
+		{
+			AfxMessageBox(_T("Failed to load the selected image!"));
+		}
+		else
+		{
+			AfxMessageBox(_T("Background successfully loaded."));
+		}
+	}
+}
+
