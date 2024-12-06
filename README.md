@@ -2,6 +2,7 @@
 Trevor Jacobs: jacobstr@msu.edu
 Gregory Lis: lisgrego@msu.edu
 Julia Bishop: bisho121@msu.edu
+Aidan Baird: bairdaid@msu.edu
 
 **Morphing**
 
@@ -29,5 +30,15 @@ The DrawFireworks function is where a firework that first starts at the bottom o
 
 **Paint Effect**
 
-The Paint effect is an option in mouse mode and essentially acts as a paint brush. You can modify the color and brush size in paint settings in the edit menu. 
+The Paint effect is an option in mouse mode and essentially acts as a paint brush. You can modify the color and brush size in paint settings in the edit menu
+
+**Movable Arm**
+
+A dynamic, interactive arm that can be repositioned within the scene for animations or effects.. 
+
+**Outlined Drawings**
+
+Create outlined drawings of characters or objects in the video.
+These outlines appear as line drawings that are dynamically associated with the elements in the video.
+
 
