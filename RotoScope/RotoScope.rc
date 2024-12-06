@@ -143,6 +143,7 @@ BEGIN
         MENUITEM "Place Aidan",                 ID_EDIT_PLACEAIDAN
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
         MENUITEM "Mario Morph",                 ID_EDIT_MORPH
+        MENUITEM "Green Screen",                ID_EDIT_GREENSCREEN
     END
     POPUP "&Movies"
     BEGIN
