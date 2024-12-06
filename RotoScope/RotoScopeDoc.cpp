@@ -8,6 +8,7 @@
 #include "RotoScopeDoc.h"
 #include "xmlhelp.h"
 #include "CMorph.h"
+#include "CChromakey.h"
 
 
 #ifdef _DEBUG
@@ -60,6 +61,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_COMMAND(ID_MOUSEMODE_GREG, &CRotoScopeDoc::OnMousemodeGreg)
 	ON_COMMAND(ID_EDIT_MORPH, &CRotoScopeDoc::OnEditMorph)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_MORPH, &CRotoScopeDoc::OnUpdateEditMorph)
+	ON_COMMAND(ID_EDIT_GREENSCREEN, &CRotoScopeDoc::OnEditGreenscreen)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_GREENSCREEN, &CRotoScopeDoc::OnUpdateEditGreenscreen)
 	ON_COMMAND(ID_MOUSEMODE_RECOLOR, &CRotoScopeDoc::OnMousemodeRecolor)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
 END_MESSAGE_MAP()
@@ -70,6 +73,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 {
 	m_waveEnabled = false;
 	m_morphEnabled = false;
+	m_greenScreenEnabled = false;
     ::CoInitialize(NULL);
 
     // Set the image size to an initial default value and black.
@@ -806,22 +810,40 @@ void CRotoScopeDoc::OnEditClearframe()
 
 void CRotoScopeDoc::DrawImage()
 {
-	// Write image from m_initial into the current image
-	for (int r = 0; r<m_image.GetHeight() && r<m_initial.GetHeight(); r++)
+	CGrImage tempImage;
+	tempImage = m_initial;
+	if (m_greenScreenEnabled)
+	{	
+		CChromakey chromakey(0.0, 95, 1.1);
+		CGrImage background;
+		CGrImage garbageMask;
+
+		background.SetSameSize(m_initial);
+		background.Fill(225, 0, 0);
+
+		//garbageMask.SetSameSize(m_initial);
+		//garbageMask.Fill(0, 0, 0);
+		garbageMask = chromakey.GenerateGarbageMask(m_initial);
+
+		tempImage = chromakey.Apply(m_initial, background, garbageMask);
+		
+	}
+	// Write image from tempImage into the current image
+	for (int r = 0; r < m_image.GetHeight() && r < tempImage.GetHeight(); r++)
 	{
-		for (int c = 0; c<m_image.GetWidth() && c<m_initial.GetWidth(); c++)
+		for (int c = 0; c < m_image.GetWidth() && c < tempImage.GetWidth(); c++)
 		{
-			m_image[r][c * 3] = m_initial[r][c * 3];
-			m_image[r][c * 3 + 1] = m_initial[r][c * 3 + 1];
-			m_image[r][c * 3 + 2] = m_initial[r][c * 3 + 2];
+			m_image[r][c * 3] = tempImage[r][c * 3];
+			m_image[r][c * 3 + 1] = tempImage[r][c * 3 + 1];
+			m_image[r][c * 3 + 2] = tempImage[r][c * 3 + 2];
 		}
 	}
 
 	// Write any saved drawings into the frame
 	if (m_movieframe < (int)m_draw.size())
 	{
-		for (list<CPoint>::iterator i = m_draw[m_movieframe].begin();
-		i != m_draw[m_movieframe].end();  i++)
+		for (std::list<CPoint>::iterator i = m_draw[m_movieframe].begin();
+			i != m_draw[m_movieframe].end(); i++)
 		{
 			for (int w = 0; w < m_width; w++)
 			{
@@ -830,11 +852,13 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
+	// Add Mario sprite (or other specific drawings)
+	/*
 	for (int r = 0; r < m_mario.GetHeight(); r++)
 	{
 		for (int c = 0; c < m_mario.GetWidth(); c++)
 		{
-			if (m_mario[r][c * 4 + 3] >= 192)
+			if (m_mario[r][c * 4 + 3] >= 192) // Alpha channel check
 			{
 				m_image[r][c * 3] = m_mario[r][c * 4];
 				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
@@ -842,10 +866,10 @@ void CRotoScopeDoc::DrawImage()
 			}
 		}
 	}
+	*/
 
 	UpdateAllViews(NULL);
 }
-
 
 void CRotoScopeDoc::OnEditDrawline()
 {
@@ -1398,6 +1422,13 @@ void CRotoScopeDoc::OnEditUndo32793()
 	}
 }
 
+void CRotoScopeDoc::OnMousemodeApplywavewarp()
+{
+	m_applyWaveEffect = true; // Enable the wave effect
+	ApplyWaveEffect();        // Apply the wave effect
+	m_applyWaveEffect = false; // Reset the flag after the effect is applied
+	UpdateAllViews(NULL);
+
 void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
 {
 	// Define the target key color for blue screen
@@ -1462,6 +1493,23 @@ void CRotoScopeDoc::OnEditMorph()
 void CRotoScopeDoc::OnUpdateEditMorph(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_morphEnabled);
+}
+
+
+void CRotoScopeDoc::OnEditGreenscreen()
+{
+	if (m_greenScreenEnabled) {
+		m_greenScreenEnabled = false;
+	}
+	else {
+		m_greenScreenEnabled = true;
+	}
+}
+
+
+void CRotoScopeDoc::OnUpdateEditGreenscreen(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_greenScreenEnabled);
 }
 
 void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage)

@@ -104,6 +104,7 @@ private:
 	bool m_morphEnabled;
 	bool m_waveEnabled;
 	CGrImage m_tempImage;
+	bool m_greenScreenEnabled;
 
 	std::stack<CGrImage>	m_images;
 	bool m_applyWaveEffect;
@@ -173,6 +174,8 @@ public:
 	afx_msg void OnUpdateEditMorph(CCmdUI* pCmdUI);
 	afx_msg void OnMousemodeRecolor();
 	afx_msg void OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI);
+	afx_msg void OnEditGreenscreen();
+	afx_msg void OnUpdateEditGreenscreen(CCmdUI* pCmdUI);
 };
 
 
