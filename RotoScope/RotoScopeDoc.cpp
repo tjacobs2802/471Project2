@@ -878,6 +878,8 @@ void CRotoScopeDoc::DrawImage()
 	UpdateAllViews(NULL);
 	}
 
+	/*
+	* 
 	if (m_movieframe > 0 && m_movieframe <= 50) {
 		DrawTrevor(m_trevor, 200, 200);
 	}
@@ -900,21 +902,6 @@ void CRotoScopeDoc::DrawImage()
 		DrawGreg(m_greg, 400, 600);
 		DrawJulia(m_julia, 500, 300);
 		DrawTrevor(m_trevor, 700, 100);
-	}
-
-	// Add Mario sprite (or other specific drawings)
-	/*
-	for (int r = 0; r < m_mario.GetHeight(); r++)
-	{
-		for (int c = 0; c < m_mario.GetWidth(); c++)
-		{
-			if (m_mario[r][c * 4 + 3] >= 192) // Alpha channel check
-			{
-				m_image[r][c * 3] = m_mario[r][c * 4];
-				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
-				m_image[r][c * 3 + 2] = m_mario[r][c * 4 + 2];
-			}
-		}
 	}
 	*/
 
