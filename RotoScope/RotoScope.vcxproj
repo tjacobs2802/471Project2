@@ -138,7 +138,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="armDlg.cpp" />
-    <ClCompile Include="CChromakey.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="audio\DirSoundSource.cpp" />
     <ClCompile Include="CMorph.cpp" />
@@ -157,7 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="armDlg.h" />
-    <ClInclude Include="CChromakey.h" />
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="audio\DirSoundSource.h" />
     <ClInclude Include="CMorph.h" />

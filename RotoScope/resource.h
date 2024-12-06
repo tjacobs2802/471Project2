@@ -55,6 +55,9 @@
 #define ID_EDIT_MARIOMORPH              32803
 #define ID_EDIT_MORPH                   32804
 #define ID_MOUSEMODE_RECOLOR            32805
+#define ID_EDIT_MARIOMORPH              32803
+#define ID_EDIT_MORPH                   32804
+#define ID_MOUSEMODE_RECOLOR            32805
 
 // Next default values for new objects
 // 
