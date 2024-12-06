@@ -878,6 +878,30 @@ void CRotoScopeDoc::DrawImage()
 	UpdateAllViews(NULL);
 	}
 
+	if (m_movieframe > 0 && m_movieframe <= 50) {
+		DrawTrevor(m_trevor, 200, 200);
+	}
+
+	if (m_movieframe > 200 && m_movieframe <= 250) {
+		DrawJulia(m_julia, 200, 200);
+	}
+	if (m_movieframe > 400 && m_movieframe <= 450) {
+		DrawGreg(m_greg, 200, 200);
+	}
+	if (m_movieframe > 600 && m_movieframe <= 650) {
+		DrawAidan(m_aidan, 200, 200);
+	}
+	if (m_movieframe > 800 && m_movieframe <= 850) {
+		DrawMario(m_mario, 200, 200);
+	}
+	if (m_movieframe > 1000 && m_movieframe <= 1100) {
+		DrawMario(m_mario, 100, 800);
+		DrawAidan(m_aidan, 300, 500);
+		DrawGreg(m_greg, 400, 600);
+		DrawJulia(m_julia, 500, 300);
+		DrawTrevor(m_trevor, 700, 100);
+	}
+
 	// Add Mario sprite (or other specific drawings)
 	/*
 	for (int r = 0; r < m_mario.GetHeight(); r++)
