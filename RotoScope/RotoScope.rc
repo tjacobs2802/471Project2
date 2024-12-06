@@ -146,6 +146,8 @@ BEGIN
         MENUITEM "Green Screen",                ID_EDIT_GREENSCREEN
         MENUITEM "Paint Settings",              ID_EDIT_PAINTSETTINGS
         MENUITEM "Firework",                    ID_EDIT_FIREWORK
+        MENUITEM "Blue Screen",                 ID_EDIT_BLUESCREEN
+        MENUITEM "Choose Background",           ID_EDIT_CHOOSEBACKGROUND
     END
     POPUP "&Movies"
     BEGIN
