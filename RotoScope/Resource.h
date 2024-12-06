@@ -55,19 +55,20 @@
 #define ID_MOUSEMODE_GREG               32802
 #define ID_EDIT_MORPH                   32803
 #define ID_EDIT_GREENSCREEN             32805
-#define ID_MOUSEMODE_PAINT              32806
-#define ID_EDIT_BLUESCREEN              32807
+#define ID_MOUSEMODE_PAINT              32807
 #define ID_MOUSEMODE_RECOLOR            32808
 #define ID_EDIT_PAINTSETTINGS           32809
-#define ID_EDIT_CHOOSEBACKGROUND        32810
+#define ID_EDIT_FIREWORK                32810
+#define ID_EDIT_BLUESCREEN              32811
+#define ID_EDIT_CHOOSEBACKGROUND        32812
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32811
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

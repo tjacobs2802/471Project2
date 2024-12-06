@@ -70,8 +70,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
 	ON_COMMAND(ID_MOUSEMODE_PAINT, &CRotoScopeDoc::OnMousemodePaint)
 	ON_COMMAND(ID_EDIT_PAINTSETTINGS, &CRotoScopeDoc::OnEditPaintsettings)
-	ON_COMMAND(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnEditFirework)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnUpdateEditFirework)
+	/*ON_COMMAND(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnEditFirework)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnUpdateEditFirework)*/
 	ON_COMMAND(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnEditBluescreen)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnUpdateEditBluescreen)
 	ON_COMMAND(ID_EDIT_CHOOSEBACKGROUND, &CRotoScopeDoc::OnEditChoosebackground)
@@ -1668,16 +1668,6 @@ void CRotoScopeDoc::OnEditChoosebackground()
 		else
 {
 			AfxMessageBox(_T("Background successfully loaded."));
-	if (m_fireworkEnabled) {
-		m_fireworkEnabled = false;
+		}
 	}
-	else {
-		m_fireworkEnabled = true;
-	}
-}
-
-
-void CRotoScopeDoc::OnUpdateEditFirework(CCmdUI* pCmdUI)
-{
-	pCmdUI->SetCheck(m_fireworkEnabled);
-}
+}	
