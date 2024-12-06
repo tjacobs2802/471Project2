@@ -878,12 +878,11 @@ void CRotoScopeDoc::DrawImage()
 	UpdateAllViews(NULL);
 	}
 
-	/*
-	* 
+	
 	if (m_movieframe > 0 && m_movieframe <= 50) {
 		DrawTrevor(m_trevor, 200, 200);
 	}
-
+	/*
 	if (m_movieframe > 200 && m_movieframe <= 250) {
 		DrawJulia(m_julia, 200, 200);
 	}
@@ -896,6 +895,7 @@ void CRotoScopeDoc::DrawImage()
 	if (m_movieframe > 800 && m_movieframe <= 850) {
 		DrawMario(m_mario, 200, 200);
 	}
+	/*
 	if (m_movieframe > 1000 && m_movieframe <= 1100) {
 		DrawMario(m_mario, 100, 800);
 		DrawAidan(m_aidan, 300, 500);
