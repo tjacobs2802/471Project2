@@ -59,10 +59,8 @@
 #define ID_MOUSEMODE_RECOLOR            32808
 #define ID_EDIT_PAINTSETTINGS           32809
 #define ID_EDIT_FIREWORK                32810
-#define ID_EDIT_BLUESCREEN              32811
-#define ID_EDIT_BLUESCREEN32811         32811
-#define ID_EDIT_CHOOSEBACKGROUND        32812
-#define ID_EDIT_CHOOSEBACKGROUND32812   32812
+#define ID_EDIT_BLUESCREEN				32813	
+#define ID_EDIT_CHOOSEBACKGROUND		32812
 
 // Next default values for new objects
 // 
