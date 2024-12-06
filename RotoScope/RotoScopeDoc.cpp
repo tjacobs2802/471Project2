@@ -70,11 +70,11 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
 	ON_COMMAND(ID_MOUSEMODE_PAINT, &CRotoScopeDoc::OnMousemodePaint)
 	ON_COMMAND(ID_EDIT_PAINTSETTINGS, &CRotoScopeDoc::OnEditPaintsettings)
-	/*ON_COMMAND(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnEditFirework)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnUpdateEditFirework)*/
 	ON_COMMAND(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnEditBluescreen)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnUpdateEditBluescreen)
 	ON_COMMAND(ID_EDIT_CHOOSEBACKGROUND, &CRotoScopeDoc::OnEditChoosebackground)
+	ON_COMMAND(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnEditFirework)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnUpdateEditFirework)
 END_MESSAGE_MAP()
 
 
@@ -84,6 +84,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_waveEnabled = false;
 	m_morphEnabled = false;
 	m_greenScreenEnabled = false;
+	m_blueScreenEnabled = false;
 	m_fireworkEnabled = false;
     ::CoInitialize(NULL);
 
@@ -358,19 +359,6 @@ void CRotoScopeDoc::CreateOneFrame()
 	if (m_waveEnabled) {
 		ApplyWaveEffect();
 	}
-
-	int frameNumber = m_movieframe;
-	int initialX = 400;
-	int initialY = 0;
-	int speed = 2;
-
-	int newX = initialX; 
-	int newY = initialY + frameNumber * speed; 
-
-	newX = (std::min)(m_image.GetWidth() - 1, (std::max)(0, newX));
-	newY = (std::min)(m_image.GetHeight() - 1, (std::max)(0, newY));
-
-	DrawFireworks(m_image, newX, newY);
 
 	OnFramesWriteoneframe();
 
@@ -1671,3 +1659,20 @@ void CRotoScopeDoc::OnEditChoosebackground()
 		}
 	}
 }	
+
+
+void CRotoScopeDoc::OnEditFirework()
+{
+	if (m_fireworkEnabled) {
+		m_fireworkEnabled = false;
+	}
+	else {
+		m_fireworkEnabled = true;
+	}
+}
+
+
+void CRotoScopeDoc::OnUpdateEditFirework(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_fireworkEnabled);
+}

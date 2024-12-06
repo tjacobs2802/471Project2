@@ -191,6 +191,8 @@ public:
 
 	/*afx_msg void OnEditFirework();
 	afx_msg void OnUpdateEditFirework(CCmdUI* pCmdUI);*/
+	afx_msg void OnEditFirework();
+	afx_msg void OnUpdateEditFirework(CCmdUI* pCmdUI);
 };
 
 
