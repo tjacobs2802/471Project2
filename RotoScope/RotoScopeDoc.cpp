@@ -818,16 +818,11 @@ void CRotoScopeDoc::DrawImage()
 	{	
 		CChromakey chromakey(0.0, 95, 1.1);
 		CGrImage background;
-		CGrImage garbageMask;
 
 		background.SetSameSize(m_initial);
 		background.Fill(225, 0, 0);
 
-		//garbageMask.SetSameSize(m_initial);
-		//garbageMask.Fill(0, 0, 0);
-		garbageMask = chromakey.GenerateGarbageMask(m_initial);
-
-		tempImage = chromakey.Apply(m_initial, background, garbageMask);
+		tempImage = chromakey.Apply(m_initial, background);
 		
 	}
 	// Write image from tempImage into the current image

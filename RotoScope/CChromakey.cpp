@@ -2,19 +2,52 @@
 #include <stdexcept>
 #include <cmath>
 
-CChromakey::CChromakey(double greenThreshold, int minGreenIntensity, double shadowToleranceFactor)
-    : m_greenThreshold(greenThreshold), m_minGreenIntensity(minGreenIntensity), m_shadowToleranceFactor(shadowToleranceFactor) {}
+CChromakey::CChromakey(double greenThreshold, int minGreenIntensity, double shadowToleranceFactor) {
+    m_greenThreshold = greenThreshold;
+    m_minGreenIntensity = minGreenIntensity;
+    m_shadowToleranceFactor = shadowToleranceFactor;
+    m_garbageMask.LoadFile(L"garbagemask.png");
+}
 
-CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& background, const CGrImage& garbageMask)
-{
-    if (foreground.GetWidth() != background.GetWidth() || foreground.GetHeight() != background.GetHeight() ||
-        foreground.GetWidth() != garbageMask.GetWidth() || foreground.GetHeight() != garbageMask.GetHeight())
-    {
-        throw std::runtime_error("All images must have the same dimensions.");
+void CChromakey::ResizeGarbageMask(int width, int height) {
+    if (m_garbageMask.GetWidth() != width || m_garbageMask.GetHeight() != height) {
+        CGrImage resizedImage;
+        resizedImage.SetSize(width, height); // Create a new image with the desired dimensions
+
+        int originalWidth = m_garbageMask.GetWidth();
+        int originalHeight = m_garbageMask.GetHeight();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Map the new pixel location to the original image's coordinates
+                int srcX = x * originalWidth / width;
+                int srcY = y * originalHeight / height;
+
+                // Copy the nearest pixel's RGB values
+                const unsigned char* srcPixel = m_garbageMask[srcY] + srcX * 3;
+                unsigned char* destPixel = resizedImage[y] + x * 3;
+
+                destPixel[0] = srcPixel[0]; // R
+                destPixel[1] = srcPixel[1]; // G
+                destPixel[2] = srcPixel[2]; // B
+            }
+        }
+
+        // Update m_garbageMask with the resized image
+        m_garbageMask = std::move(resizedImage);
+    }
+}
+
+CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& background) {
+    if (foreground.GetWidth() != background.GetWidth() || foreground.GetHeight() != background.GetHeight()) {
+        throw std::runtime_error("Foreground and background must have the same dimensions.");
     }
 
     int width = foreground.GetWidth();
     int height = foreground.GetHeight();
+
+    // Resize the garbage mask to match the size of the foreground/background
+    ResizeGarbageMask(width, height);
 
     // Create the output image
     CGrImage output;
@@ -37,7 +70,7 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
             double bgB = static_cast<double>(bgRow[idx + 2]);
 
             // Garbage mask pixel
-            const unsigned char* maskRow = garbageMask[y];
+            const unsigned char* maskRow = m_garbageMask[y];
             double maskValue = static_cast<double>(maskRow[idx]) / 255.0;
 
             // Compute green dominance
@@ -46,15 +79,24 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
             // Compute alpha
             double alpha = 1.0;
             if (fgG > m_minGreenIntensity && fgG > fgR * m_shadowToleranceFactor &&
-                fgG > fgB * m_shadowToleranceFactor && greenDominance > m_greenThreshold)
-            {
+                fgG > fgB * m_shadowToleranceFactor && greenDominance > m_greenThreshold) {
                 alpha = 0.0;
             }
 
-            // Apply garbage mask
-            alpha = (maskValue > 0.5) ? 1.0 : alpha;
+            // Modify alpha based on garbage mask
+            if (maskValue == 0.0) {
+                // Garbage mask is black: use background pixel directly
+                alpha = 0.0;
+            }
+            else if (maskValue == 1.0) {
+                // Garbage mask is white: fully apply alpha blending (keep calculated alpha)
+            }
+            else {
+                // Garbage mask is gray: interpolate between alpha blending and background
+                alpha = alpha * maskValue;
+            }
 
-            // Blend the foreground and background
+            // Compute the output pixel
             double outR = alpha * fgR + (1.0 - alpha) * bgR;
             double outG = alpha * fgG + (1.0 - alpha) * bgG;
             double outB = alpha * fgB + (1.0 - alpha) * bgB;
@@ -69,48 +111,7 @@ CGrImage CChromakey::Apply(const CGrImage& foreground, const CGrImage& backgroun
 
     return output;
 }
-
-CGrImage CChromakey::GenerateGarbageMask(const CGrImage& frame)
-{
-    int width = frame.GetWidth();
-    int height = frame.GetHeight();
-
-    // Create a garbage mask (initially black)
-    CGrImage garbageMask;
-    garbageMask.SetSameSize(frame);
-    garbageMask.Fill(0, 0, 0);
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int idx = x * 3;
-
-            // Foreground pixel components
-            const unsigned char* row = frame[y];
-            double r = static_cast<double>(row[idx]);
-            double g = static_cast<double>(row[idx + 1]);
-            double b = static_cast<double>(row[idx + 2]);
-
-            // Compute green dominance
-            double greenDominance = g / (r + g + b + 0.001);
-
-            // Determine if the pixel should be protected
-            if (!(g > m_minGreenIntensity && g > r * m_shadowToleranceFactor &&
-                g > b * m_shadowToleranceFactor && greenDominance > m_greenThreshold))
-            {
-                // Protect this pixel
-                unsigned char* maskRow = garbageMask[y];
-                maskRow[idx] = 255;     // R
-                maskRow[idx + 1] = 255; // G
-                maskRow[idx + 2] = 255; // B
-            }
-        }
-    }
-
-    return garbageMask;
-}
-
-
-// Aiden's project
+// Aidan's project
 /*
 void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
 {
