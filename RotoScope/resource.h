@@ -48,16 +48,9 @@
 #define ID_MOUSEMODE_APPLYWAVEWARP      32800
 #define ID_EDIT_PLACEAIDAN              32801
 #define ID_MOUSEMODE_GREG               32802
-#define ID_EDIT_MARIOMORPH              32802
 #define ID_EDIT_MORPH                   32803
-#define ID_EDIT_GREENCHROMAKEY          32804
 #define ID_EDIT_GREENSCREEN             32805
-#define ID_EDIT_MARIOMORPH              32803
-#define ID_EDIT_MORPH                   32804
-#define ID_MOUSEMODE_RECOLOR            32805
-#define ID_EDIT_MARIOMORPH              32803
-#define ID_EDIT_MORPH                   32804
-#define ID_MOUSEMODE_RECOLOR            32805
+#define ID_MOUSEMODE_RECOLOR            32807
 
 // Next default values for new objects
 // 
