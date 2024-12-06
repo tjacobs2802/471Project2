@@ -109,6 +109,7 @@ private:
 	bool m_waveEnabled;
 	CGrImage m_tempImage;
 	bool m_greenScreenEnabled;
+	bool m_fireworkEnabled;
 	bool m_blueScreenEnabled;
 
 	std::stack<CGrImage>	m_images;
@@ -188,6 +189,8 @@ public:
 	afx_msg void OnMousemodePaint();
 	afx_msg void OnEditPaintsettings();
 
+	afx_msg void OnEditFirework();
+	afx_msg void OnUpdateEditFirework(CCmdUI* pCmdUI);
 };
 
 

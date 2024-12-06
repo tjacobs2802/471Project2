@@ -70,6 +70,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
 	ON_COMMAND(ID_MOUSEMODE_PAINT, &CRotoScopeDoc::OnMousemodePaint)
 	ON_COMMAND(ID_EDIT_PAINTSETTINGS, &CRotoScopeDoc::OnEditPaintsettings)
+	ON_COMMAND(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnEditFirework)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_FIREWORK, &CRotoScopeDoc::OnUpdateEditFirework)
 	ON_COMMAND(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnEditBluescreen)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_BLUESCREEN, &CRotoScopeDoc::OnUpdateEditBluescreen)
 	ON_COMMAND(ID_EDIT_CHOOSEBACKGROUND, &CRotoScopeDoc::OnEditChoosebackground)
@@ -82,6 +84,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 	m_waveEnabled = false;
 	m_morphEnabled = false;
 	m_greenScreenEnabled = false;
+	m_fireworkEnabled = false;
     ::CoInitialize(NULL);
 
     // Set the image size to an initial default value and black.
@@ -828,7 +831,7 @@ void CRotoScopeDoc::DrawImage()
 	tempImage = m_initial;
 
 	if (m_greenScreenEnabled || m_blueScreenEnabled)
-	{
+	{	
 		// Determine the chroma key color
 		std::string chromaKeyColor = m_greenScreenEnabled ? "green" : "blue";
 
@@ -841,7 +844,7 @@ void CRotoScopeDoc::DrawImage()
 
 		// Initialize the chroma keyer with appropriate parameters
 		CChromakey chromakey(0.0, 95, 1.1, chromaKeyColor);
-
+		
 		// Apply chroma keying with the chosen background
 		tempImage = chromakey.Apply(m_initial, m_chromaKeyBackground);
 	}
@@ -870,9 +873,41 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
+	if (m_fireworkEnabled)
+	{
+		int frameNumber = m_movieframe;
+		int initialX = 400;
+		int initialY = 0;
+		int speed = 2;
+
+		int newX = initialX;
+		int newY = initialY + frameNumber * speed;
+
+		newX = (std::min)(m_image.GetWidth() - 1, (std::max)(0, newX));
+		newY = (std::min)(m_image.GetHeight() - 1, (std::max)(0, newY));
+
+		DrawFireworks(m_image, newX, newY);
+	UpdateAllViews(NULL);
+	}
+
+	// Add Mario sprite (or other specific drawings)
+	/*
+	for (int r = 0; r < m_mario.GetHeight(); r++)
+	{
+		for (int c = 0; c < m_mario.GetWidth(); c++)
+		{
+			if (m_mario[r][c * 4 + 3] >= 192) // Alpha channel check
+			{
+				m_image[r][c * 3] = m_mario[r][c * 4];
+				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
+				m_image[r][c * 3 + 2] = m_mario[r][c * 4 + 2];
+			}
+		}
+	}
+	*/
+
 	UpdateAllViews(NULL);
 }
-
 
 void CRotoScopeDoc::OnEditDrawline()
 {
@@ -931,6 +966,8 @@ void CRotoScopeDoc::OnEditPlaceaidan()
 		int offsetX = 37;  // Example X offset for shoulder
 		int offsetY = 67;  // Example Y offset for shoulder
 
+		// Clear the canvas
+		m_image.Fill(0, 0, 0);
 
 		// Draw the body at the pivot point
 		DrawAidan(m_image, x, y);
@@ -1629,9 +1666,18 @@ void CRotoScopeDoc::OnEditChoosebackground()
 			AfxMessageBox(_T("Failed to load the selected image!"));
 		}
 		else
-		{
+{
 			AfxMessageBox(_T("Background successfully loaded."));
-		}
+	if (m_fireworkEnabled) {
+		m_fireworkEnabled = false;
+	}
+	else {
+		m_fireworkEnabled = true;
 	}
 }
 
+
+void CRotoScopeDoc::OnUpdateEditFirework(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_fireworkEnabled);
+}
