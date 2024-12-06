@@ -40,3 +40,10 @@ BEGIN_MESSAGE_MAP(CBrushDialog, CDialogEx)
     ON_EN_CHANGE(IDC_PaintG, &CBrushDialog::OnEnChangeBrushSettings)
     ON_EN_CHANGE(IDC_PaintB, &CBrushDialog::OnEnChangeBrushSettings)
 END_MESSAGE_MAP()
+
+// CBrushDialog message handlers
+
+void CBrushDialog::OnEnChangeBrushSettings()
+{
+    // TODO: Add notification handling logic if necessary
+}
