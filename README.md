@@ -17,7 +17,7 @@ The program allows the user to select a background image (such as background.png
 
 **Recoloring (RecolorRedToBlue)**
 
-The RecolorRedToBlue function selectively changes the red pixels in an image to blue. It identifies pixels that fall within a certain red range and replaces them by decreasing the red component and increasing the blue component. This effect is applied when the "Recolor" mode is activated.
+The RecolorRedToBlue function selectively changes the red pixels in an image to blue. It identifies pixels that fall within a certain red range and replaces them by decreasing the red component and increasing the blue component. This effect is applied when the "Recolor" mode is activated. We chose to use this specifically for the tie and for the firework so that we can show that we have control of the color, even when it isnt that way in the original video.
 
 **Fireworks Effect**
 
