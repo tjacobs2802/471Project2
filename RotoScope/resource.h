@@ -8,17 +8,22 @@
 #define IDR_RotoScopeTYPE               129
 #define IDD_LINEDLG                     130
 #define IDD_armDlg                      132
+#define IDD_PAINTDLG                    133
 #define IDC_X1                          1000
 #define IDC_X2                          1001
 #define IDC_m_x                         1001
+#define IDC_PaintR                      1001
 #define IDC_Y1                          1002
 #define IDC_m_y                         1002
+#define IDC_PAINTSIZE                   1002
 #define IDC_Y2                          1003
 #define IDC_m_angle                     1003
 #define IDC_B                           1004
 #define IDC_G                           1005
+#define IDC_PaintG                      1005
 #define IDC_R                           1006
 #define IDC_W                           1007
+#define IDC_PaintB                      1008
 #define ID_MOVIES_OPENSOURCEMOVIE       32771
 #define ID_MOVIES_OPENOUTPUTMOVIE       32772
 #define ID_MOVIES_CLOSEOUTPUTMOVIE      32773
@@ -50,15 +55,17 @@
 #define ID_MOUSEMODE_GREG               32802
 #define ID_EDIT_MORPH                   32803
 #define ID_EDIT_GREENSCREEN             32805
+#define ID_MOUSEMODE_PAINT              32807
 #define ID_MOUSEMODE_RECOLOR            32808
+#define ID_EDIT_PAINTSETTINGS           32809
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32807
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_RESOURCE_VALUE        135
+#define _APS_NEXT_COMMAND_VALUE         32810
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

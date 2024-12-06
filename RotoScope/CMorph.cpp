@@ -1,6 +1,6 @@
 #include "CMorph.h"
 #include <cmath>
-#include <algorithm> // Ensure the standard library functions are available
+#include <algorithm>
 
 #ifdef max
 #undef max
@@ -21,48 +21,96 @@ CPoint CMorph::InterpolatePoint(const CPoint& p1, const CPoint& p2, double alpha
     return CPoint(x, y);
 }
 
-// Morph function
-CGrImage CMorph::MorphImages(CGrImage& srcImage, CGrImage& destImage, double alpha)
+// Resize function
+CGrImage CMorph::ResizeImage(CGrImage& image, int newWidth, int newHeight)
 {
-    // Initialize the output image
-    CGrImage outputImage;
-    outputImage.SetSameSize(srcImage);
+    CGrImage resizedImage;
+    resizedImage.SetSize(newWidth, newHeight);
 
-    // Compute interpolated control points
-    std::vector<CPoint> interpolatedPoints;
-    for (size_t i = 0; i < m_srcPoints.size(); ++i) {
-        interpolatedPoints.push_back(InterpolatePoint(m_srcPoints[i], m_destPoints[i], alpha));
-    }
+    double scaleX = static_cast<double>(image.GetWidth()) / newWidth;
+    double scaleY = static_cast<double>(image.GetHeight()) / newHeight;
 
-    // Perform basic pixel mapping
-    for (int y = 0; y < srcImage.GetHeight(); ++y) {
-        for (int x = 0; x < srcImage.GetWidth(); ++x) {
-            double dx = 0.0, dy = 0.0, weightSum = 0.0;
+    for (int y = 0; y < newHeight; ++y) {
+        for (int x = 0; x < newWidth; ++x) {
+            // Map the target pixel to the source image
+            double srcX = x * scaleX;
+            double srcY = y * scaleY;
 
-            for (size_t i = 0; i < m_srcPoints.size(); ++i) {
-                double distance = std::sqrt(std::pow(m_srcPoints[i].x - x, 2) + std::pow(m_srcPoints[i].y - y, 2)) + 1e-5;
-                double weight = 1.0 / distance;
+            // Calculate integer pixel indices
+            int x1 = static_cast<int>(std::floor(srcX));
+            int y1 = static_cast<int>(std::floor(srcY));
+            int x2 = std::min(x1 + 1, image.GetWidth() - 1);
+            int y2 = std::min(y1 + 1, image.GetHeight() - 1);
 
-                dx += weight * (interpolatedPoints[i].x - m_srcPoints[i].x);
-                dy += weight * (interpolatedPoints[i].y - m_srcPoints[i].y);
-                weightSum += weight;
-            }
+            // Ensure indices are within bounds
+            x1 = (x1 < 0) ? 0 : ((x1 >= image.GetWidth()) ? (image.GetWidth() - 1) : x1);
+            y1 = (y1 < 0) ? 0 : ((y1 >= image.GetHeight()) ? (image.GetHeight() - 1) : y1);
 
-            int mappedX = static_cast<int>(x + dx / weightSum);
-            int mappedY = static_cast<int>(y + dy / weightSum);
+            // Fractional parts for interpolation
+            double dx = srcX - x1;
+            double dy = srcY - y1;
 
-            // Ensure mapped points are within bounds
-            mappedX = std::max(0, std::min(srcImage.GetWidth() - 1, mappedX));
-            mappedY = std::max(0, std::min(srcImage.GetHeight() - 1, mappedY));
+            // Get the four neighboring pixels
+            unsigned char* p11 = &image[y1][x1 * 3]; // Top-left
+            unsigned char* p21 = &image[y1][x2 * 3]; // Top-right
+            unsigned char* p12 = &image[y2][x1 * 3]; // Bottom-left
+            unsigned char* p22 = &image[y2][x2 * 3]; // Bottom-right
 
-            // Blend pixel values
-            for (int c = 0; c < 3; ++c) {
-                int srcValue = srcImage[y][x * 3 + c];
-                int destValue = destImage[mappedY][mappedX * 3 + c];
-                outputImage[y][x * 3 + c] = static_cast<int>(srcValue * (1.0 - alpha) + destValue * alpha);
+            // Interpolate each color channel
+            for (int c = 0; c < 3; ++c) { // RGB channels
+                double val =
+                    (1 - dx) * (1 - dy) * p11[c] +
+                    dx * (1 - dy) * p21[c] +
+                    (1 - dx) * dy * p12[c] +
+                    dx * dy * p22[c];
+
+                resizedImage[y][x * 3 + c] = static_cast<unsigned char>(std::round(val));
             }
         }
     }
 
-    return outputImage;
+    return resizedImage;
+}
+
+// Morph function
+CGrImage CMorph::MorphImages(CGrImage& srcImage, CGrImage& destImage, double alpha) {
+    // Resize both images to the same size
+    int commonWidth = std::max(srcImage.GetWidth(), destImage.GetWidth());
+    int commonHeight = std::max(srcImage.GetHeight(), destImage.GetHeight());
+
+    CGrImage resizedSrcImage = ResizeImage(srcImage, commonWidth, commonHeight);
+    CGrImage resizedDestImage = ResizeImage(destImage, commonWidth, commonHeight);
+
+    int width = commonWidth;
+    int height = commonHeight;
+
+    // Create the resulting image
+    CGrImage resultImage;
+    resultImage.SetSize(width, height);
+
+    // Morph each pixel
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            // Access each pixel using direct indexing
+            unsigned char srcR = resizedSrcImage[y][x * 3];
+            unsigned char srcG = resizedSrcImage[y][x * 3 + 1];
+            unsigned char srcB = resizedSrcImage[y][x * 3 + 2];
+
+            unsigned char destR = resizedDestImage[y][x * 3];
+            unsigned char destG = resizedDestImage[y][x * 3 + 1];
+            unsigned char destB = resizedDestImage[y][x * 3 + 2];
+
+            // Blend colors based on alpha
+            unsigned char resultR = static_cast<unsigned char>((1 - alpha) * srcR + alpha * destR);
+            unsigned char resultG = static_cast<unsigned char>((1 - alpha) * srcG + alpha * destG);
+            unsigned char resultB = static_cast<unsigned char>((1 - alpha) * srcB + alpha * destB);
+
+            // Set the resulting pixel
+            resultImage[y][x * 3] = resultR;
+            resultImage[y][x * 3 + 1] = resultG;
+            resultImage[y][x * 3 + 2] = resultB;
+        }
+    }
+
+    return resultImage;
 }

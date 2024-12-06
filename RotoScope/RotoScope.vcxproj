@@ -138,10 +138,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="armDlg.cpp" />
+    <ClCompile Include="CBrushDialog.cpp" />
     <ClCompile Include="CChromakey.cpp" />
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="audio\DirSoundSource.cpp" />
     <ClCompile Include="CMorph.cpp" />
+    <ClCompile Include="CPaintEffect.cpp" />
     <ClCompile Include="graphics\GrImage.cpp" />
     <ClCompile Include="LineDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
@@ -157,10 +159,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="armDlg.h" />
+    <ClInclude Include="CBrushDialog.h" />
     <ClInclude Include="CChromakey.h" />
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="audio\DirSoundSource.h" />
     <ClInclude Include="CMorph.h" />
+    <ClInclude Include="CPaintEffect.h" />
     <ClInclude Include="graphics\GrImage.h" />
     <ClInclude Include="LineDlg.h" />
     <ClInclude Include="MainFrm.h" />

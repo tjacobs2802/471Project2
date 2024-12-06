@@ -142,8 +142,9 @@ BEGIN
         MENUITEM "Place Mario",                 ID_EDIT_PLACEMARIO
         MENUITEM "Place Aidan",                 ID_EDIT_PLACEAIDAN
         MENUITEM "Set Variables",               ID_EDIT_SETVARIABLES
-        MENUITEM "Mario Morph",                 ID_EDIT_MORPH
+        MENUITEM "Julia/Trevor Morph",          ID_EDIT_MORPH
         MENUITEM "Green Screen",                ID_EDIT_GREENSCREEN
+        MENUITEM "Paint Settings",              ID_EDIT_PAINTSETTINGS
     END
     POPUP "&Movies"
     BEGIN
@@ -177,6 +178,7 @@ BEGIN
         MENUITEM "Apply Wave Warp",             ID_MOUSEMODE_APPLYWAVEWARP
         MENUITEM "Greg",                        ID_MOUSEMODE_GREG
         MENUITEM "Recolor",                     ID_MOUSEMODE_RECOLOR
+        MENUITEM "Paint",                       ID_MOUSEMODE_PAINT
     END
     POPUP "&View"
     BEGIN
@@ -278,6 +280,23 @@ BEGIN
     LTEXT           "Arm Angle",IDC_STATIC,45,120,53,13
 END
 
+IDD_PAINTDLG DIALOGEX 0, 0, 277, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Paint Settings"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,165,55,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,220,55,50,14
+    LTEXT           "R",IDC_STATIC,67,18,9,8
+    EDITTEXT        IDC_PaintR,81,15,13,14,ES_AUTOHSCROLL
+    LTEXT           "Brush Size",IDC_STATIC,42,36,34,8
+    EDITTEXT        IDC_PAINTSIZE,81,34,98,14,ES_AUTOHSCROLL
+    LTEXT           "G",IDC_STATIC,103,18,9,8
+    EDITTEXT        IDC_PaintG,117,15,13,14,ES_AUTOHSCROLL
+    LTEXT           "B",IDC_STATIC,144,18,9,8
+    EDITTEXT        IDC_PaintB,158,15,13,14,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -349,6 +368,15 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 169
     END
+
+    IDD_PAINTDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 270
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+        HORZGUIDE, 69
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -364,6 +392,11 @@ BEGIN
 END
 
 IDD_armDlg AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_PAINTDLG AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

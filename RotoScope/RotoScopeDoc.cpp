@@ -9,6 +9,7 @@
 #include "xmlhelp.h"
 #include "CMorph.h"
 #include "CChromakey.h"
+#include "CBrushDialog.h"
 
 
 #ifdef _DEBUG
@@ -67,6 +68,8 @@ BEGIN_MESSAGE_MAP(CRotoScopeDoc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_GREENSCREEN, &CRotoScopeDoc::OnUpdateEditGreenscreen)
 	ON_COMMAND(ID_MOUSEMODE_RECOLOR, &CRotoScopeDoc::OnMousemodeRecolor)
 	ON_UPDATE_COMMAND_UI(ID_MOUSEMODE_APPLYWAVEWARP, &CRotoScopeDoc::OnUpdateMousemodeApplywavewarp)
+	ON_COMMAND(ID_MOUSEMODE_PAINT, &CRotoScopeDoc::OnMousemodePaint)
+	ON_COMMAND(ID_EDIT_PAINTSETTINGS, &CRotoScopeDoc::OnEditPaintsettings)
 END_MESSAGE_MAP()
 
 
@@ -525,6 +528,12 @@ void CRotoScopeDoc::Mouse(int p_x, int p_y)
 		DrawGreg(m_image, x, y);
 		UpdateAllViews(NULL);
 	}
+
+	else if (m_mode == 8) {
+		m_images.push(m_image); // Allow undo
+		m_paintEffect.Paint(m_image, x, y);
+		UpdateAllViews(NULL);
+	}
 }
 
 
@@ -819,8 +828,7 @@ void CRotoScopeDoc::DrawImage()
 		CChromakey chromakey(0.0, 95, 1.1);
 		CGrImage background;
 
-		background.SetSameSize(m_initial);
-		background.Fill(225, 0, 0);
+		background.LoadFile(L"background.png");
 
 		tempImage = chromakey.Apply(m_initial, background);
 		
@@ -1239,40 +1247,17 @@ void CRotoScopeDoc::DrawJulia(CGrImage& image, int x1, int y1)
 {
 	//allow undo of placing
 	m_images.push(m_image);
-	for (int r = 0; r < m_julia.GetHeight(); r++)
-	{
-		for (int c = 0; c < m_julia.GetWidth(); c++)
-		{
-			//make sure point is inside image
-			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
-			{
-				if (m_julia[r][c * 4 + 3] >= 192)
-				{
-					m_image[r + y1][(c + x1) * 3] = m_julia[r][c * 4];
-					m_image[r + y1][(c + x1) * 3 + 1] = m_julia[r][c * 4 + 1];
-					m_image[r + y1][(c + x1) * 3 + 2] = m_julia[r][c * 4 + 2];
-				}
-			}
-		}
-	}
-}
-
-void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
-{
-	// Allow undo of placing
-	m_images.push(m_image);
-
 	CGrImage* imageToUse;
 
 	if (m_morphEnabled) {
 		// Morphing is enabled: create a morphed image
 		CMorph morph;
-		static double alpha = 0.5; // Adjust alpha as needed
-		imageToUse = new CGrImage(morph.MorphImages(m_aidan, m_mario, alpha));
+		static double alpha = 0.4; // Adjust alpha as needed
+		imageToUse = new CGrImage(morph.MorphImages(m_julia, m_trevor, alpha));
 	}
 	else {
-		// Use the standard Mario image
-		imageToUse = &m_mario;
+		// Use the standard Julia image
+		imageToUse = &m_julia;
 	}
 
 	// Overlay the selected image onto m_image
@@ -1297,26 +1282,66 @@ void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
 	// Update the view to reflect changes
 	UpdateAllViews(NULL);
 }
-void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1)
+
+void CRotoScopeDoc::DrawMario(CGrImage& image, int x1, int y1)
 {
 	//allow undo of placing
 	m_images.push(m_image);
-	for (int r = 0; r < m_trevor.GetHeight(); r++)
+	for (int r = 0; r < m_mario.GetHeight(); r++)
 	{
-		for (int c = 0; c < m_trevor.GetWidth(); c++)
+		for (int c = 0; c < m_mario.GetWidth(); c++)
 		{
 			//make sure point is inside image
 			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth())
 			{
-				if (m_trevor[r][c * 4 + 3] >= 192)
+				if (m_mario[r][c * 4 + 3] >= 192)
 				{
-					m_image[r + y1][(c + x1) * 3] = m_trevor[r][c * 4];
-					m_image[r + y1][(c + x1) * 3 + 1] = m_trevor[r][c * 4 + 1];
-					m_image[r + y1][(c + x1) * 3 + 2] = m_trevor[r][c * 4 + 2];
+					m_image[r + y1][(c + x1) * 3] = m_mario[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = m_mario[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = m_mario[r][c * 4 + 2];
 				}
 			}
 		}
 	}
+}
+void CRotoScopeDoc::DrawTrevor(CGrImage& image, int x1, int y1)
+{
+	//allow undo of placing
+	m_images.push(m_image);
+	CGrImage* imageToUse;
+
+	if (m_morphEnabled) {
+		// Morphing is enabled: create a morphed image
+		CMorph morph;
+		static double alpha = 0.7; // Adjust alpha as needed
+		imageToUse = new CGrImage(morph.MorphImages(m_julia, m_trevor, alpha));
+	}
+	else {
+		// Use the standard Julia image
+		imageToUse = &m_trevor;
+	}
+
+	// Overlay the selected image onto m_image
+	for (int r = 0; r < imageToUse->GetHeight(); r++) {
+		for (int c = 0; c < imageToUse->GetWidth(); c++) {
+			// Ensure the pixel is within bounds of the main image
+			if (r + y1 < m_image.GetHeight() && c + x1 < m_image.GetWidth()) {
+				if ((*imageToUse)[r][c * 4 + 3] >= 192) {
+					m_image[r + y1][(c + x1) * 3] = (*imageToUse)[r][c * 4];
+					m_image[r + y1][(c + x1) * 3 + 1] = (*imageToUse)[r][c * 4 + 1];
+					m_image[r + y1][(c + x1) * 3 + 2] = (*imageToUse)[r][c * 4 + 2];
+				}
+			}
+		}
+	}
+
+	// If we allocated a new image, delete it to avoid memory leaks
+	if (m_morphEnabled) {
+		delete imageToUse;
+	}
+
+	// Update the view to reflect changes
+	UpdateAllViews(NULL);
 }
 
 void CRotoScopeDoc::DrawGreg(CGrImage& image, int x1, int y1)
@@ -1550,4 +1575,29 @@ void CRotoScopeDoc::OnMousemodeApplywavewarp()
 void CRotoScopeDoc::OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_waveEnabled);
+}
+
+
+void CRotoScopeDoc::OnMousemodePaint()
+{
+	m_mode = 8;
+}
+
+
+void CRotoScopeDoc::OnEditPaintsettings()
+{
+	CBrushDialog dlg;
+
+	// Initialize dialog variables
+	dlg.m_brushSize = m_paintEffect.GetBrushSize();
+	dlg.m_brushR = m_paintEffect.GetBrushR();
+	dlg.m_brushG = m_paintEffect.GetBrushG();
+	dlg.m_brushB = m_paintEffect.GetBrushB();
+
+	if (dlg.DoModal() == IDOK)
+	{
+		// Retrieve values from dialog
+		m_paintEffect.SetBrushSize(dlg.m_brushSize);
+		m_paintEffect.SetBrushColor(dlg.m_brushR, dlg.m_brushG, dlg.m_brushB);
+	}
 }

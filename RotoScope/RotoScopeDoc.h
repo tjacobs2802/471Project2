@@ -16,6 +16,7 @@
 #include "graphics/GrImage.h"
 #include "LineDlg.h"
 #include "ArmDlg.h"
+#include "CPaintEffect.h"
 
 /*! \mainpage RotoScope Starter Appliaidanion
  *
@@ -87,6 +88,8 @@ private:
 	CGrImage			m_trevor;	
 
 	CGrImage			m_greg;
+
+	CPaintEffect		m_paintEffect;
 
 	int m_x1;
 	int m_y1;
@@ -176,6 +179,8 @@ public:
 	afx_msg void OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI);
 	afx_msg void OnEditGreenscreen();
 	afx_msg void OnUpdateEditGreenscreen(CCmdUI* pCmdUI);
+	afx_msg void OnMousemodePaint();
+	afx_msg void OnEditPaintsettings();
 };
 
 

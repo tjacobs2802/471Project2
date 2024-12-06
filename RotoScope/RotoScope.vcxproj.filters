@@ -54,6 +54,15 @@
     <ClCompile Include="CMorph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CChromakey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPaintEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CBrushDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h">
@@ -99,6 +108,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CMorph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CChromakey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPaintEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CBrushDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
