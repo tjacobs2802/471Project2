@@ -8,6 +8,7 @@
 #include "RotoScopeDoc.h"
 #include "xmlhelp.h"
 #include "CMorph.h"
+#include "CChromakey.h"
 
 
 #ifdef _DEBUG
@@ -74,6 +75,7 @@ CRotoScopeDoc::CRotoScopeDoc()
 {
 	m_waveEnabled = false;
 	m_morphEnabled = false;
+	m_greenScreenEnabled = false;
     ::CoInitialize(NULL);
 
     // Set the image size to an initial default value and black.
@@ -810,22 +812,40 @@ void CRotoScopeDoc::OnEditClearframe()
 
 void CRotoScopeDoc::DrawImage()
 {
-	// Write image from m_initial into the current image
-	for (int r = 0; r<m_image.GetHeight() && r<m_initial.GetHeight(); r++)
+	CGrImage tempImage;
+	tempImage = m_initial;
+	if (m_greenScreenEnabled)
+	{	
+		CChromakey chromakey(0.0, 95, 1.1);
+		CGrImage background;
+		CGrImage garbageMask;
+
+		background.SetSameSize(m_initial);
+		background.Fill(225, 0, 0);
+
+		//garbageMask.SetSameSize(m_initial);
+		//garbageMask.Fill(0, 0, 0);
+		garbageMask = chromakey.GenerateGarbageMask(m_initial);
+
+		tempImage = chromakey.Apply(m_initial, background, garbageMask);
+		
+	}
+	// Write image from tempImage into the current image
+	for (int r = 0; r < m_image.GetHeight() && r < tempImage.GetHeight(); r++)
 	{
-		for (int c = 0; c<m_image.GetWidth() && c<m_initial.GetWidth(); c++)
+		for (int c = 0; c < m_image.GetWidth() && c < tempImage.GetWidth(); c++)
 		{
-			m_image[r][c * 3] = m_initial[r][c * 3];
-			m_image[r][c * 3 + 1] = m_initial[r][c * 3 + 1];
-			m_image[r][c * 3 + 2] = m_initial[r][c * 3 + 2];
+			m_image[r][c * 3] = tempImage[r][c * 3];
+			m_image[r][c * 3 + 1] = tempImage[r][c * 3 + 1];
+			m_image[r][c * 3 + 2] = tempImage[r][c * 3 + 2];
 		}
 	}
 
 	// Write any saved drawings into the frame
 	if (m_movieframe < (int)m_draw.size())
 	{
-		for (list<CPoint>::iterator i = m_draw[m_movieframe].begin();
-		i != m_draw[m_movieframe].end();  i++)
+		for (std::list<CPoint>::iterator i = m_draw[m_movieframe].begin();
+			i != m_draw[m_movieframe].end(); i++)
 		{
 			for (int w = 0; w < m_width; w++)
 			{
@@ -834,11 +854,13 @@ void CRotoScopeDoc::DrawImage()
 		}
 	}
 
+	// Add Mario sprite (or other specific drawings)
+	/*
 	for (int r = 0; r < m_mario.GetHeight(); r++)
 	{
 		for (int c = 0; c < m_mario.GetWidth(); c++)
 		{
-			if (m_mario[r][c * 4 + 3] >= 192)
+			if (m_mario[r][c * 4 + 3] >= 192) // Alpha channel check
 			{
 				m_image[r][c * 3] = m_mario[r][c * 4];
 				m_image[r][c * 3 + 1] = m_mario[r][c * 4 + 1];
@@ -846,10 +868,10 @@ void CRotoScopeDoc::DrawImage()
 			}
 		}
 	}
+	*/
 
 	UpdateAllViews(NULL);
 }
-
 
 void CRotoScopeDoc::OnEditDrawline()
 {
@@ -1402,100 +1424,6 @@ void CRotoScopeDoc::OnEditUndo32793()
 	}
 }
 
-void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
-{
-	// Define the target key color for blue screen
-	const double key_r = 0.0; // Red component of blue screen color
-	const double key_g = 0.0; // Green component of blue screen color
-	const double key_b = 255.0; // Blue component of blue screen color
-
-	// Ensure the output image has the same dimensions as the foreground
-	output.SetSameSize(foreground);
-
-	// Iterate over every pixel in the foreground image
-	for (int y = 0; y < foreground.GetHeight(); ++y)
-	{
-		for (int x = 0; x < foreground.GetWidth(); ++x)
-		{
-			// Foreground color
-			double r = foreground[y][x * 3];
-			double g = foreground[y][x * 3 + 1];
-			double b = foreground[y][x * 3 + 2];
-
-			// Background color
-			double bg_r = background[y][x * 3];
-			double bg_g = background[y][x * 3 + 1];
-			double bg_b = background[y][x * 3 + 2];
-
-			// Calculate alpha value using the Vlahos equation
-			double alpha = 1.0 - min(1.0, (b - key_b) / 255.0);
-			alpha = max(0.0, min(alpha, 1.0)); // Ensure alpha is within [0, 1]
-
-			// Apply the garbage mask to adjust the alpha value
-			double mask_value = garbageMask[y][x * 3] / 255.0; // Normalize the garbage mask pixel to [0, 1]
-			alpha *= (1.0 - mask_value); // Reduce alpha based on the garbage mask
-
-			// Blend the pixels based on the alpha value
-			double out_r = alpha * r + (1.0 - alpha) * bg_r;
-			double out_g = alpha * g + (1.0 - alpha) * bg_g;
-			double out_b = alpha * b + (1.0 - alpha) * bg_b;
-
-			// Write the blended color to the output image
-			output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
-		}
-	}
-void CRotoScopeDoc::OnMousemodeApplywavewarp()
-{
-	m_applyWaveEffect = true; // Enable the wave effect
-	ApplyWaveEffect();        // Apply the wave effect
-	m_applyWaveEffect = false; // Reset the flag after the effect is applied
-	UpdateAllViews(NULL);
-
-void CRotoScopeDoc::Chromakey(CGrImage& foreground, CGrImage& background, CGrImage& output, CGrImage& garbageMask)
-{
-	// Define the target key color for blue screen
-	const double key_r = 0.0; // Red component of blue screen color
-	const double key_g = 0.0; // Green component of blue screen color
-	const double key_b = 255.0; // Blue component of blue screen color
-
-	// Ensure the output image has the same dimensions as the foreground
-	output.SetSameSize(foreground);
-
-	// Iterate over every pixel in the foreground image
-	for (int y = 0; y < foreground.GetHeight(); ++y)
-	{
-		for (int x = 0; x < foreground.GetWidth(); ++x)
-		{
-			// Foreground color
-			double r = foreground[y][x * 3];
-			double g = foreground[y][x * 3 + 1];
-			double b = foreground[y][x * 3 + 2];
-
-			// Background color
-			double bg_r = background[y][x * 3];
-			double bg_g = background[y][x * 3 + 1];
-			double bg_b = background[y][x * 3 + 2];
-
-			// Calculate alpha value using the Vlahos equation
-			double alpha = 1.0 - min(1.0, (b - key_b) / 255.0);
-			alpha = max(0.0, min(alpha, 1.0)); // Ensure alpha is within [0, 1]
-
-			// Apply the garbage mask to adjust the alpha value
-			double mask_value = garbageMask[y][x * 3] / 255.0; // Normalize the garbage mask pixel to [0, 1]
-			alpha *= (1.0 - mask_value); // Reduce alpha based on the garbage mask
-
-			// Blend the pixels based on the alpha value
-			double out_r = alpha * r + (1.0 - alpha) * bg_r;
-			double out_g = alpha * g + (1.0 - alpha) * bg_g;
-			double out_b = alpha * b + (1.0 - alpha) * bg_b;
-
-			// Write the blended color to the output image
-			output.Set(x, y, static_cast<int>(out_r), static_cast<int>(out_g), static_cast<int>(out_b));
-		}
-	}
-}
-
-
 void CRotoScopeDoc::OnMousemodeGreg()
 {
 	m_mode = 7;
@@ -1517,99 +1445,21 @@ void CRotoScopeDoc::OnUpdateEditMorph(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_morphEnabled);
 }
 
-void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage)
+
+void CRotoScopeDoc::OnEditGreenscreen()
 {
-	int redThresholdLow = 100;
-	int redThresholdHigh = 255;
-	int greenThresholdMax = 100;
-	int blueThresholdMax = 100;
-
-	outputImage.SetSameSize(inputImage);
-	for (int y = 0; y < inputImage.GetHeight(); ++y)
-	{
-		for (int x = 0; x < inputImage.GetWidth(); ++x)
-		{
-			int r = inputImage[y][x * 3];
-			int g = inputImage[y][x * 3 + 1];
-			int b = inputImage[y][x * 3 + 2];
-
-			if (r >= redThresholdLow && r <= redThresholdHigh && g <= greenThresholdMax && b <= blueThresholdMax)
-			{
-				int newR = (std::max)(0, r - 50);
-				int newB = (std::min)(255, r + 50);
-				outputImage.Set(x, y, newR, g, newB);
-			}
-			else
-			{
-				outputImage.Set(x, y, r, g, b);
-			}
-		}
-	}
-}
-
-
-
-void CRotoScopeDoc::OnMousemodeRecolor()
-{
-	CGrImage originalImage = m_image;
-	CGrImage recoloredImage;
-
-	RecolorRedToBlue(originalImage, recoloredImage);
-
-	m_image = recoloredImage;
-
-	UpdateAllViews(NULL);
-}
-
-void CRotoScopeDoc::ApplyWaveEffect()
-{
-	if (!m_waveEnabled) {
-		return; // If the flag is false, don't apply the wave effect
-	}
-	CGrImage tempImage;
-	tempImage.SetSameSize(m_image);
-
-	double waveAmplitude = 4.0;
-	double waveFrequency = 0.1;
-
-	for (int y = 0; y < m_image.GetHeight(); y++)
-	{
-		for (int x = 0; x < m_image.GetWidth(); x++)
-		{
-			int newX = x + waveAmplitude * sin(y * waveFrequency);
-			int newY = y + waveAmplitude * cos(x * waveFrequency);
-
-			newX = max(0, min(m_image.GetWidth() - 1, newX));
-			newY = max(0, min(m_image.GetHeight() - 1, newY));
-
-			tempImage[y][x * 3] = m_image[newY][newX * 3];
-			tempImage[y][x * 3 + 1] = m_image[newY][newX * 3 + 1];
-			tempImage[y][x * 3 + 2] = m_image[newY][newX * 3 + 2];
-		}
-	}
-
-	m_image = tempImage;
-	UpdateAllViews(NULL);
-}
-
-
-void CRotoScopeDoc::OnMousemodeApplywavewarp()
-{
-	if (m_waveEnabled) {
-		m_waveEnabled = false;
-		m_image = m_image;
-		UpdateAllViews(NULL);
+	if (m_greenScreenEnabled) {
+		m_greenScreenEnabled = false;
 	}
 	else {
-		m_waveEnabled = true;
-		m_tempImage = m_image;
-		ApplyWaveEffect();
+		m_greenScreenEnabled = true;
 	}
 }
 
-void CRotoScopeDoc::OnUpdateMousemodeApplywavewarp(CCmdUI* pCmdUI)
+
+void CRotoScopeDoc::OnUpdateEditGreenscreen(CCmdUI* pCmdUI)
 {
-	pCmdUI->SetCheck(m_waveEnabled);
+	pCmdUI->SetCheck(m_greenScreenEnabled);
 }
 
 void CRotoScopeDoc::RecolorRedToBlue(CGrImage& inputImage, CGrImage& outputImage)
