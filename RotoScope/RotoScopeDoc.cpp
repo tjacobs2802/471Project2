@@ -965,8 +965,6 @@ void CRotoScopeDoc::OnEditPlaceaidan()
 		int offsetX = 37;  // Example X offset for shoulder
 		int offsetY = 67;  // Example Y offset for shoulder
 
-		// Clear the canvas
-		m_image.Fill(0, 0, 0);
 
 		// Draw the body at the pivot point
 		DrawAidan(m_image, x, y);
